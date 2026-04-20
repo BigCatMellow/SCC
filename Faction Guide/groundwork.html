@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>StarCraft TMG — Faction Framework</title>
+<link rel="stylesheet" href="assets/css/faction-guide.css" />
+</head>
+<body>
+<div class="site-nav"><nav><a href="index.html">Contents</a> <span class="sep">•</span> <a href="groundwork.html">Framework</a> <span class="sep">•</span> <a href="protoss.html">Protoss</a> <span class="sep">•</span> <a href="terran.html">Terran</a> <span class="sep">•</span> <a href="zerg.html">Zerg</a></nav></div>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">Dark mode</button>
+<div class="book">
+
+<section class="page ">
+  <div class="inner">
+    <div class="running"><div class="left">Faction compendium</div><div class="right">Framework</div></div>
+    
+    <div class="part-kicker">Companion volume</div>
+    <h1 class="part-title">Faction framework</h1>
+    <div class="part-sub">This companion volume reads faction cards, tactical cards, and units through the same plain-English-first method as the core rules guide. It is not a replacement for the core rules. It is the layer that makes faction content easier to learn, easier to compare, and easier to rule cleanly.</div>
+    <div class="hero-rule">
+      <div class="label">How to use this book</div>
+      <div class="text">Read every entry in three passes: plain-English summary first, practical role and synergy notes second, and RAW watch boxes only when wording is likely to create friction at the table.</div>
+    </div>
+    <div class="grid-2">
+      <div class="index-card"><div class="head">What this book is doing</div><div class="body"><p>It carries over the tone and structure of the core guide so the faction material does not feel like an appendix dump. Every major card type gets a readable explanation, battlefield role notes, and medium-depth matchup advice.</p></div></div>
+      <div class="index-card"><div class="head">What this book is not doing</div><div class="body"><p>It is not quoting RAW everywhere. RAW is used intentionally and selectively where wording, timing, placement, or exceptions are likely to matter.</p></div></div>
+    </div>
+    
+  </div>
+</section>
+
+<section class="page ">
+  <div class="inner">
+    <div class="running"><div class="left">Faction framework</div><div class="right">Guide contents</div></div>
+    
+    <div class="section-band"><div class="section-number">F</div><div class="section-title-wrap"><div class="section-kicker">Shared framework</div><div class="section-title">Groundwork contents</div></div></div>
+    <div class="toc-card"><div class="head">Section map</div><div class="body">
+      <ul class="toc-list">
+        <li><a href="#raw-tags">Faction tags and legality</a></li>
+        <li><a href="#raw-slots">Tactical cards and slots</a></li>
+        <li><a href="#raw-resources">Resources, exhaustion, and payment</a></li>
+        <li><a href="#raw-ability-timing">Ability timing</a></li>
+        <li><a href="#source-note-protoss-resource">Protoss resource note</a></li>
+      </ul>
+    </div></div>
+    
+  </div>
+</section>
+
+<section class="page ">
+  <div class="inner">
+    <div class="running"><div class="left">Faction framework</div><div class="right">Selective RAW</div></div>
+    
+        <div class="section-band" id="raw-tags"><div class="section-number">R</div><div class="section-title-wrap"><div class="section-kicker">Core crossover</div><div class="section-title">Faction tag eligibility</div></div></div>
+        <div class="framework-card">
+          <div class="head">RAW says</div>
+          <div class="body">
+            <p>Every card in the game features Faction Tags. A Faction Card always displays a Race Tag and usually includes a Sub-Faction Tag as well. When building an army, every tag on the Unit or Tactical Card must also appear on the Faction Card. If even one tag does not match, that card cannot be included in the army.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="support-card"><div class="head">Plain English</div><div class="body"><p>Read legality from the card that is trying to get in, not from the faction card. A card only needs all of its own tags to be present on the chosen faction card.</p></div></div>
+          <div class="support-card"><div class="head">Table effect</div><div class="body"><p>A single extra tag can disqualify a card even if the rest match. A card with fewer tags than the faction card is still legal.</p></div></div>
+        </div>
+        
+  </div>
+</section>
+
+<section class="page ">
+  <div class="inner">
+    <div class="running"><div class="left">Faction framework</div><div class="right">Selective RAW</div></div>
+    
+        <div class="section-band" id="raw-slots"><div class="section-number">R</div><div class="section-title-wrap"><div class="section-kicker">Core crossover</div><div class="section-title">Tactical cards and army slots</div></div></div>
+        <div class="framework-card">
+          <div class="head">RAW says</div>
+          <div class="body">
+            <p>Tactical Cards unlock additional Army Slots beyond those provided by the Faction Card. Tactical Cards may be purchased with Vespene Gas to increase the number of available slots. If a Tactical Card is marked as Unique, only one copy may be included in the army.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="support-card"><div class="head">Plain English</div><div class="body"><p>Faction cards give the starting frame. Tactical cards are how you widen that frame before the game begins.</p></div></div>
+          <div class="support-card"><div class="head">Table effect</div><div class="body"><p>Do not judge a list only by its faction card. Check its tactical infrastructure too.</p></div></div>
+        </div>
+        
+  </div>
+</section>
+
+<section class="page ">
+  <div class="inner">
+    <div class="running"><div class="left">Faction framework</div><div class="right">Selective RAW</div></div>
+    
+        <div class="section-band" id="raw-resources"><div class="section-number">R</div><div class="section-title-wrap"><div class="section-kicker">Core crossover</div><div class="section-title">Resources, costs, and card states</div></div></div>
+        <div class="framework-card">
+          <div class="head">RAW says</div>
+          <div class="body">
+            <p>Each faction has a separate resource type to spend on the faction’s abilities: Terran uses CP, Zerg uses BM, and Protoss uses PE. To pay for an ability’s cost, the player must Exhaust a Ready card that matches the resource type. If the player cannot Exhaust enough cards to pay the entire cost, they cannot activate the ability. Excess resources are lost.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="support-card"><div class="head">Plain English</div><div class="body"><p>Resources are generated by exhausting real cards. They are not a pooled currency you bank between effects.</p></div></div>
+          <div class="support-card"><div class="head">Table effect</div><div class="body"><p>A card can either stay ready, get exhausted for its own ability, or get exhausted to pay for something else. It cannot do both at once.</p></div></div>
+        </div>
+        
+  </div>
+</section>
+
+<section class="page ">
+  <div class="inner">
+    <div class="running"><div class="left">Faction framework</div><div class="right">Selective RAW</div></div>
+    
+        <div class="section-band" id="raw-ability-timing"><div class="section-number">R</div><div class="section-title-wrap"><div class="section-kicker">Core crossover</div><div class="section-title">Special ability timing</div></div></div>
+        <div class="framework-card">
+          <div class="head">RAW says</div>
+          <div class="body">
+            <p>An ability may be used only when all its requirements are met. The timing or trigger condition must be correct, and any Phase restrictions must be satisfied. All Costs must be paid in full before the ability resolves, and the Unit using the ability must be on the battlefield.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="support-card"><div class="head">Plain English</div><div class="body"><p>Faction and tactical abilities do not float free of the turn structure. They still obey timing, target legality, and payment rules.</p></div></div>
+          <div class="support-card"><div class="head">Table effect</div><div class="body"><p>When a faction card looks powerful, first ask when it is allowed, who it can affect, and what has to be exhausted to pay for it.</p></div></div>
+        </div>
+        
+  </div>
+</section>
+
+<section class="page ">
+  <div class="inner">
+    <div class="running"><div class="left">Faction framework</div><div class="right">Source note</div></div>
+    
+    <div class="section-band" id="source-note-protoss-resource"><div class="section-number">N</div><div class="section-title-wrap"><div class="section-kicker">Source note</div><div class="section-title">Protoss resource naming mismatch</div></div></div>
+    <div class="notice-strip"><p><b>Why this matters:</b> the core rules describe Protoss faction resource as <b>PE</b>, while the expanded Protoss faction presentation shows <b>EN</b> on card faces. This guide keeps the source visible and flags the mismatch instead of silently normalising it.</p></div>
+    <details class="raw-note">
+      <summary class="head"><span>RAW watch</span></summary>
+      <div class="body">
+        <p><b>Core rules:</b> “Protoss uses PE.”</p>
+        <p><b>Faction presentation:</b> Protoss faction and tactical cards display “+1 EN.”</p>
+        <p><b>Guide reading:</b> treat this as a source inconsistency that should be agreed at the table before play. Do not let one player use the printed face and the other use the core resource label as if they were different systems.</p>
+      </div>
+    </details>
+    
+  </div>
+</section>
+
+</div>
+<script src="assets/js/faction-guide.js"></script>
+</body>
+</html>

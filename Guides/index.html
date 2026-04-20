@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>StarCraft TMG — Modular Library</title>
+<link rel="stylesheet" href="assets/css/core-book.css" />
+</head>
+<body>
+<div class="site-nav"><nav><a href="index.html">Library</a> <span class="sep">•</span> <a href="core/index.html">Core</a> <span class="sep">•</span> <a href="factions/index.html">Factions</a></nav></div>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">Dark mode</button>
+<div class="book"><div class="index-shell" id="contents">
+<section class="page">
+  <div class="inner">
+    <div class="running"><div class="left">StarCraft TMG</div><div class="right">Modular Library</div></div>
+    <div class="part-kicker">Maintainable package</div>
+    <h1 class="part-title">Digital Rulebook Library</h1>
+    <div class="part-sub">This package splits the giant single-file books into maintainable sections with shared CSS and JavaScript. The structure is aimed at long-term editing, easier debugging, and cleaner path management.</div>
+    <div class="index-card">
+      <div class="head">Core rules</div>
+      <div class="body">
+        <p>The core rulebook is split into four maintainable sections instead of one giant HTML export.</p>
+        <div class="inline-links">
+          <a href="core/index.html">Open core index</a>
+          <a href="core/foundations-and-front-matter.html">Foundations</a>
+          <a href="core/movement-and-battlefield.html">Movement & battlefield</a>
+          <a href="core/turn-structure-and-actions.html">Turn structure & actions</a>
+          <a href="core/advanced-reference.html">Advanced reference</a>
+        </div>
+      </div>
+    </div>
+    <div class="index-card">
+      <div class="head">Faction compendium</div>
+      <div class="body">
+        <p>The faction companion is split into a groundwork file plus separate Protoss, Terran, and Zerg books so each army can keep its own theme and be edited independently.</p>
+        <div class="inline-links">
+          <a href="factions/index.html">Open faction index</a>
+          <a href="factions/groundwork.html">Groundwork</a>
+          <a href="factions/protoss.html">Protoss</a>
+          <a href="factions/terran.html">Terran</a>
+          <a href="factions/zerg.html">Zerg</a>
+        </div>
+      </div>
+    </div>
+    <div class="index-card">
+      <div class="head">Maintenance notes</div>
+      <div class="body">
+        <ul class="index-list">
+          <li>Shared styles live in <b>assets/css/</b>.</li>
+          <li>Shared behavior and theme toggles live in <b>assets/js/</b>.</li>
+          <li>Internal links were rewritten so cross-book anchors still work after splitting.</li>
+          <li>This layout is better for long-term editing than a single giant export.</li>
+        </ul>
+        <p class="muted-note">Best practice from here: edit the smaller book files, not the packaged giant files.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</div></div>
+<script src="assets/js/core-book.js"></script>
+</body>
+</html>

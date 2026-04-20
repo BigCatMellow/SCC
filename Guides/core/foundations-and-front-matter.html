@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>StarCraft TMG — Core Rules</title>
+<link rel="stylesheet" href="../assets/css/core-book.css" />
+</head>
+<body>
+<div class="site-nav"><nav><a href="../index.html">Library</a> <span class="sep">•</span> <a href="index.html">Core Index</a> <span class="sep">•</span> <a href="../factions/index.html">Factions</a></nav></div>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">Dark mode</button>
+<div class="book"><section class="page cover-page print-breathe" id="cover">
+<div class="inner">
+<div class="running">
+<div class="left">StarCraft TMG</div>
+<div class="right">Rules as Written Guide</div>
+</div>
+<div class="part-kicker">Study Edition  •  Print-First HTML</div>
+<h1 class="part-title" id="cover-title">StarCraft the Miniatures Game</h1>
+<div class="part-sub">A rules-first study book for learning the system, checking tricky interactions, and keeping exact wording close at hand.</div>
+<div class="hero-rule">
+<div class="label">What this book is trying to do</div>
+<div class="text">Teach the rules in a cleaner order, preserve the load-bearing RAW limits and exceptions, and give the reader better entry points into the hardest parts of the game.</div>
+</div>
+<div class="study-strip">
+<div class="study-card">
+<div class="head">Built for three jobs</div>
+<div class="title">Study • reference • table check</div>
+<p>Use the ledes to learn, the rule panels to verify exact logic, and the callouts to catch common failure points before they become table disputes.</p>
+</div>
+<div class="study-card">
+<div class="head">Editorial stance</div>
+<div class="title">RAW first, teaching second</div>
+<p>This edition is organized to be easier to read, but it is not inventing a new rules layer. Clarification exists to reveal the rule, not replace it.</p>
+</div>
+</div>
+<div class="tool-grid">
+<div class="tool-card">
+<div class="head">Best first read</div>
+<div class="title">Start with Parts I–III and VIII–X</div>
+<p>Those parts build the vocabulary, movement logic, activation flow, and attack structure that most later disputes depend on.</p>
+</div>
+<div class="tool-card">
+<div class="head">Keep nearby</div>
+<div class="title">Use Parts XI–XV when a game state gets messy</div>
+<p>Those parts hold the highest concentration of timing windows, keyword pressure, close-combat constraints, and ruling-sequence material.</p>
+</div>
+</div>
+<div class="footer"><div>StarCraft TMG — RAW Guide · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>1</div></div>
+</div>
+</section>
+<section class="page print-tight" id="sec-fm-clean-reference-learning-manual">
+<div class="inner">
+<div class="running"><div class="left">Front Matter</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">FM</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Guide Introduction</div>
+<div class="section-title" id="sec-fm-clean-reference-learning-manual-title">Clean Reference + Learning Manual</div>
+</div>
+</div>
+<div class="layout">
+<div>
+<div class="rule-panel">
+<div class="panel-head"><div class="panel-title">Overview</div><div class="panel-ref">Section summary</div></div>
+<div class="panel-body">
+<p><strong>Version:</strong> Built from project source files available in this workspace.</p>
+<p><strong>Purpose:</strong> Reorder the core rules into a clearer teaching sequence while preserving function, timing, and restrictions from the source text.</p>
+<p><strong>What this is:</strong> A structured RAW companion focused on the core operating rules.</p>
+<p><strong>What this is not:</strong> A replacement for mission cards, deployment cards, faction cards, or the full keyword glossary.</p>
+</div>
+</div>
+<div class="ruling-box">
+<div class="head">What to expect</div>
+<div class="title">The book is trying to reduce friction, not add lore weight</div>
+<p>The goal is faster learning and faster verification. When a section feels short, that is usually deliberate: extra wording was cut so the rule structure stays visible.</p>
+</div>
+</div>
+<aside>
+<div class="aside raw">
+<div class="aside-head">Still required at the table</div>
+<p>You still need your faction card, tactical cards, unit cards, mission card, deployment card, and the full keyword source whenever an exhaustive entry matters.</p>
+</div>
+<div class="aside">
+<div class="aside-head">Best use cases</div>
+<p>Read it front to back to learn the system. Open it mid-part to re-anchor a rules cluster. Use the RAW references when wording precision matters most.</p>
+</div>
+</aside>
+</div>
+<div class="footer"><div>Front Matter · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>3</div></div>
+</div>
+</section>
+<section class="page" id="sec-fm-how-to-use-this-guide">
+<div class="inner">
+<div class="running"><div class="left">Front Matter</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">FM</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Guide Introduction</div>
+<div class="section-title" id="sec-fm-how-to-use-this-guide-title">How to Use This Guide</div>
+</div>
+</div>
+<div class="decision-ladder">
+<div class="head">Section anatomy</div>
+<div class="title">How to read a page without over-reading it</div>
+<div class="decision-strip">
+<div class="decision-step"><span class="n">1 • Lede</span><div class="t">Use the opener to understand the job of the rule before you chase exceptions.</div></div>
+<div class="decision-step"><span class="n">2 • Rule panel</span><div class="t">Read the panel for the operative rule text and the exact constraints that decide outcomes.</div></div>
+<div class="decision-step"><span class="n">3 • Callouts</span><div class="t">Use side notes, mistake strips, and worked rulings to catch the readings most likely to go wrong.</div></div>
+<div class="decision-step"><span class="n">4 • RAW refs</span><div class="t">Use the reference line when you need the original source part or a wording check.</div></div>
+</div>
+</div>
+<div class="study-strip">
+<div class="study-card">
+<div class="head">For new players</div>
+<div class="title">Read for concept first</div>
+<p>Do not stop on every keyword the first time through. Learn the system skeleton first, then return to the high-friction sections with the glossary and ruling sequence nearby.</p>
+</div>
+<div class="study-card">
+<div class="head">For experienced players</div>
+<div class="title">Read for conflict points</div>
+<p>Focus on the places where movement legality, engagement state, timing windows, and keyword overrides collide. That is where table certainty is won or lost.</p>
+</div>
+</div>
+<details class="checkpoint">
+<summary>Quick check • When should you stop reading the summary and jump to the exact rule panel?</summary>
+<div class="quiz-answer">
+<p>Jump to the exact panel as soon as the outcome depends on a legality test, timing window, numeric restriction, or keyword override. The summary orients you; the panel settles the ruling.</p>
+</div>
+<div class="flow-back"><a class="flow-link" href="#sec-fm-how-to-use-this-guide">Return to How to Use This Guide ↑</a></div></details>
+<div class="footer"><div>Front Matter · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>4</div></div>
+</div>
+</section>
+<section class="page print-tight" id="sec-fm-editorial-method">
+<div class="inner">
+<div class="running"><div class="left">Front Matter</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">FM</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Guide Introduction</div>
+<div class="section-title" id="sec-fm-editorial-method-title">Editorial Method</div>
+</div>
+</div>
+<div class="layout">
+<div>
+<div class="rule-panel">
+<div class="panel-head"><div class="panel-title">Overview</div><div class="panel-ref">Section summary</div></div>
+<div class="panel-body">
+<p>This guide follows four principles:</p>
+<ul class="text-list">
+<li><strong>Rule function over flavor text.</strong> Introductory and thematic text has been trimmed unless it helps explain the system.</li>
+<li><strong>Specific wording preserved where it matters.</strong> Timing windows, target legality, costs, and restrictions are stated as directly as possible.</li>
+<li><strong>General rules first, exceptions second.</strong> This makes the game easier to learn without changing the outcome.</li>
+<li><strong>Source inconsistencies are flagged, not silently fixed.</strong> Where the source set appears to use conflicting terminology, this guide notes it.</li>
+</ul>
+</div>
+</div>
+<div class="mistake-strip">
+<div class="head">Reader warning</div>
+<div class="title">Clarification is not a license to improvise</div>
+<p>If a note explains a rule interaction, treat it as a reading aid tied to the source material, not as permission to ignore the actual restriction, trigger, or legality test in the underlying rule.</p>
+</div>
+</div>
+<aside>
+<div class="aside raw">
+<div class="aside-head">RAW audit note</div>
+<p>This edition was checked against the project RAW source files in Parts 2–12. No dead numbered cross-references were found there. Most disputes came from wording, source artifacts, or summary files rather than broken section numbering.</p>
+<p>The source files still contain non-rule artifacts such as "&lt;&lt; VISUAL &gt;&gt;" markers, "&lt;a5 example&gt;" placeholders, and one duplicated broken sentence in the Deploy text. Those were treated as layout debris rather than rules text.</p>
+</div>
+<div class="aside raw">
+<div class="aside-head">Second-pass RAW audit note</div>
+<p>A second focused audit then checked battlefield logic, timing windows, and keyword interactions that affect movement and engagement. No broken numbered references were found there either, but several rulings only become clear when Parts 4, 7, 8, 10, and 11 are read together.</p>
+<p>The highest-friction cross-part combinations were cover versus visibility, engagement versus ranged targeting, Active versus Reaction timing windows, and the keyword set PLACE / INSTANT / DISPLACEMENT / FLYING / BURROWED.</p>
+</div>
+</aside>
+</div>
+<div class="footer"><div>Front Matter · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>5</div></div>
+</div>
+</section>
+<section class="page" id="sec-fm-scope-of-sources-used">
+<div class="inner">
+<div class="running"><div class="left">Front Matter</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">FM</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Guide Introduction</div>
+<div class="section-title" id="sec-fm-scope-of-sources-used-title">Scope of Sources Used</div>
+</div>
+</div>
+<div class="tool-grid">
+<div class="rule-panel">
+<div class="panel-head"><div class="panel-title">Core source set</div><div class="panel-ref">Primary materials</div></div>
+<div class="panel-body">
+<ul class="text-list">
+<li>Part 2: Core Concepts</li>
+<li>Part 3: Dice and Rolling</li>
+<li>Part 4: Measuring and Movement</li>
+<li>Part 5: Cards and Characteristics</li>
+<li>Part 6: The Supply System</li>
+<li>Part 7: The Battlefield</li>
+<li>Part 8: The Game Sequence</li>
+<li>Part 9: Preparing for Battle</li>
+<li>Part 10: Advanced Rules</li>
+<li>Part 11: Keyword Glossary and Definitions</li>
+<li>Part 12: Quick Reference</li>
+</ul>
+</div>
+</div>
+<div>
+<div class="part-recap">
+<div class="head">Deliberate exclusions</div>
+<div class="title">Why the scope stops where it does</div>
+<p>This edition excludes the faction compendium and setting appendix so the book stays focused on the core operating rules instead of expanding into lore or faction reference.</p>
+</div>
+<div class="study-questions">
+<div class="head">When to go back to source</div>
+<div class="title">Use the original material when one of these is true</div>
+<ul class="text-list">
+<li>A full keyword entry matters more than the summary here.</li>
+<li>A faction-specific ability or card text creates an exception.</li>
+<li>A mission or deployment instruction changes the baseline rule.</li>
+<li>You need to verify wording rather than learn the structure.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="footer"><div>Front Matter · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>6</div></div>
+</div>
+</section>
+<section class="page print-breathe" id="part-i-core-framework">
+<div class="inner">
+<div class="running"><div class="left">Part I</div><div class="right">Rules as Written Guide</div></div>
+<div class="part-kicker">Part I</div>
+<h1 class="part-title" id="part-i-core-framework-title">Core Framework</h1>
+<div class="hero-rule">
+<div class="label">Part scope</div>
+<div class="text">This part establishes the rule language the rest of the book depends on: what a model is, what a unit is, what the base does, and how tags, keywords, and rule priority control later rulings.</div>
+</div>
+<div class="part-opener-grid">
+<div class="part-opener-card">
+<div class="head">Study use</div>
+<div class="title">Use this part for</div>
+<ul class="part-opener-list">
+<li>Locking down the game’s basic objects before later exceptions appear.</li>
+<li>Separating base-driven rules from sculpt appearance, flavor, or implied intent.</li>
+</ul>
+</div>
+<div class="part-opener-card">
+<div class="head">Study anchor</div>
+<div class="title">Anchor sections</div>
+<ul class="part-opener-list">
+<li><a class="jump-link" href="#sec-i-01-models-units-and-bases">Models, units, and bases</a></li>
+<li>Tags and player roles</li>
+<li>Keywords and rule priority</li>
+</ul>
+</div>
+</div>
+<div class="part-opener-strip">
+<div class="head">Most likely misread</div>
+<div class="title">Read carefully</div>
+<p>Most later disputes get easier once you separate ordinary wording from formal keywords, and general rules from specific overrides.</p>
+</div>
+<div class="footer"><div>Part I - Core Framework · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>7</div></div>
+</div>
+</section>
+<section class="page print-tight" id="sec-i-01-models-units-and-bases">
+<div class="inner">
+<div class="running"><div class="left">Part I - Core Framework</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">I.01</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part I</div>
+<div class="section-title" id="sec-i-01-models-units-and-bases-title">Models, Units, and Bases</div>
+</div>
+</div>
+<div class="lede">This section fixes the game’s physical baseline. A model is one miniature on one base, a unit is one or more models acting together, and the base — not the sculpt — governs measurement, contact, and legality.</div>
+<div class="page-guide">
+<div class="page-guide-card">
+<div class="head">Page role</div>
+<div class="title">Physical Rules Base</div>
+<p>Use this page to lock down the game’s physical objects before later movement and combat exceptions start layering on top.</p>
+</div>
+<div class="page-guide-card">
+<div class="head">Read for</div>
+<div class="title">What Measures</div>
+<p>Most later arguments disappear once base-to-base measurement replaces sculpt shape, pose, and scenic height.</p>
+</div>
+</div>
+<div class="rule-panel"><div class="panel-head"><div class="panel-title">1.1 Models</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>A model is a single miniature on its own base. Rules interact with the base, not the sculpt above it. Pose, weapon angle, scenic height, and dramatic flight pose do not change how the rules work.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">1.2 Units</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>A unit is one or more models acting together as a single formation. A unit:</p><ul class="text-list"><li>moves as one entity</li><li>attacks as one entity</li><li>is constrained by coherency</li><li>is either friendly or enemy depending on who controls it.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">1.3 Bases</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>The base is the true game piece.</p><p>Measurements are made base-to-base.</p><p>Bases may never overlap.</p><p>If a base cannot physically fit, the model cannot go there.</p><p>Scenic basing does not change size, line of sight, or positioning.</p><p>For models on flight stands, the bottom of the stand counts as the base.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">1.4 Wobbly Model Handling</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>If terrain prevents a model from standing flat, both players should agree where it would stand if it could be placed normally. The model is treated as occupying that agreed position.</p><div class="crossref">RAW references: Parts 2.1-2.3, 4.1.</div></div></div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-iii-01-measurement-basics">Measurement Basics</a><a class="see-link" href="#sec-vi-01-line-of-sight">Line of Sight</a><a class="see-link" href="#sec-xii-02-mission-marker-control">Mission-Marker Control</a></div>
+</div><div class="footer"><div>Models, Units, and Bases · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>8</div></div>
+</div>
+</section>
+<section class="page print-tightest" id="sec-i-02-tags-player-roles-keywords-and-rule-priority">
+<div class="inner">
+<div class="running"><div class="left">Part I - Core Framework</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">I.02</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part I</div>
+<div class="section-title" id="sec-i-02-tags-player-roles-keywords-and-rule-priority-title">Tags, Player Roles, Keywords, and Rule Priority</div>
+</div>
+</div>
+<div class="lede">This section sets the rule language the rest of the book uses. Tags identify what something is, player-role terms identify whose effect is resolving, and keywords or specific text tell you when a general rule stops applying.</div>
+<div class="page-guide">
+<div class="page-guide-card">
+<div class="head">Page role</div>
+<div class="title">Rules Language</div>
+<p>This page defines the labels and hierarchy that tell you what an object is, whose effect is resolving, and when specific text overrides the baseline rule.</p>
+</div>
+<div class="page-guide-card">
+<div class="head">Read for</div>
+<div class="title">Meaning Before Action</div>
+<p>Separate ordinary wording from formal keywords first, then check whether the rule you are reading is general or specific.</p>
+</div>
+</div>
+<div class="layout"><div><div class="rule-panel"><div class="panel-head"><div class="panel-title">2.1 Faction Tags</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Faction tags determine army legality.</p><p>A faction card always has a race tag and often a sub-faction tag.</p><p>A unit card or tactical card may only be included if every tag on that card appears on the faction card.</p><p>The card does not need to match every tag on the faction card; it only needs all of its own tags to be present there.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">2.2 Combat Tags</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Combat tags describe battlefield nature and targeting relevance. Examples include:</p><ul class="text-list"><li>Ground</li><li>Flying</li><li>Armoured</li><li>Biological</li><li>Mechanical</li><li>Light</li><li>Psionic</li></ul><p>Combat tags matter for:</p><ul class="text-list"><li>weapon target restrictions</li><li>surge matching</li><li>many special abilities and keywords.</li><li>Important distinction: Ground as a combat tag is not the same thing as GROUND LEVEL as elevation.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">2.3 Player Roles</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>These terms matter constantly:</p><ul class="text-list"><li>Active Player: the player whose turn it is to act.</li><li>Controlling Player: the player currently making decisions for a specific unit, model, or token.</li><li>Friendly / Enemy: determined by controller and team relationship.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">2.4 Keywords</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Keywords are written in BOLD CAPS and always mean the same thing wherever they appear. Two global rules matter:</p><ul class="text-list"><li>Keywords do not stack.</li><li>If a numeric keyword is gained twice, use only the highest value.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">2.5 Rule Priority</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>When a specific card, ability, mission rule, or other explicit text contradicts a general rule, the specific rule takes precedence.</p><p>That principle is one of the most important advanced-user tools in the game. When a ruling feels uncertain, ask:</p><ul class="text-list"><li>What is the general rule?</li><li>Is there a more specific rule on the card, ability, mission, or keyword?</li><li>If yes, the specific text wins.</li></ul><div class="crossref">RAW references: Parts 2.4-2.6, 11.</div></div></div></div><aside><div class="aside raw"><div class="aside-head">RAW clarification note</div><p>A lowercase word is not automatically its keyword version. Read the glossary meaning only when the source is clearly invoking the formal keyword. Example: "instant" in the Supply Pool section is ordinary English, not the INSTANT weapon keyword.</p></div></aside></div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-xiv-01-global-keyword-handling">Global Keyword Handling</a><a class="see-link" href="#sec-xiii-01-universal-ability-structure">Universal Ability Structure</a><a class="see-link" href="#sec-xiv-02-high-impact-keyword-lessons">High-Impact Keyword Lessons</a></div>
+</div><div class="footer"><div>Tags, Player Roles, Keywords, and Rule Priority · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>9</div></div>
+</div>
+</section>
+<section class="page print-breathe" id="part-ii-dice-tests-and-modifiers">
+<div class="inner">
+<div class="running"><div class="left">Part II</div><div class="right">Rules as Written Guide</div></div>
+<div class="part-kicker">Part II</div>
+<h1 class="part-title" id="part-ii-dice-tests-and-modifiers-title">Dice, Tests, and Modifiers</h1>
+<div class="hero-rule">
+<div class="label">Part scope</div>
+<div class="text">This part fixes the game’s dice vocabulary before it gets embedded inside weapons, abilities, and combat steps. Read it as the grammar behind every later roll.</div>
+</div>
+<div class="part-opener-grid">
+<div class="part-opener-card">
+<div class="head">Study use</div>
+<div class="title">Use this part for</div>
+<ul class="part-opener-list">
+<li>Understanding what counts as a roll, a test, a modifier, or a fixed value.</li>
+<li>Checking whether a rule changes the target number or changes the amount generated.</li>
+</ul>
+</div>
+<div class="part-opener-card">
+<div class="head">Study anchor</div>
+<div class="title">Anchor sections</div>
+<ul class="part-opener-list">
+<li>Re-rolls</li>
+<li>Tests</li>
+<li>Modifiers and fixed additions</li>
+</ul>
+</div>
+</div>
+<div class="part-opener-strip">
+<div class="head">Most likely misread</div>
+<div class="title">Read carefully</div>
+<p>A modifier changes the number needed, not the die result. A generated value like D3+1 is not the same thing as a +1 modifier.</p>
+</div>
+<div class="footer"><div>Part II - Dice, Tests, and Modifiers · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>10</div></div>
+</div>
+</section>
+<section class="page print-tightest" id="sec-ii-01-dice-language">
+<div class="inner">
+<div class="running"><div class="left">Part II - Dice, Tests, and Modifiers</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">II.01</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part II</div>
+<div class="section-title" id="sec-ii-01-dice-language-title">Dice Language</div>
+</div>
+</div>
+<div class="lede">This section gives you the game’s dice grammar. It separates rolls, tests, re-rolls, modifiers, and fixed additions so later combat and ability text can be read without guesswork.</div>
+<div class="page-guide">
+<div class="page-guide-card">
+<div class="head">Page role</div>
+<div class="title">Dice Grammar</div>
+<p>This page builds the dice vocabulary used everywhere else, so later combat steps and ability timing are not carrying hidden assumptions.</p>
+</div>
+<div class="page-guide-card">
+<div class="head">Read for</div>
+<div class="title">Number Needed Vs. Value Generated</div>
+<p>Keep target-number modifiers separate from generated values like D3+1, because they affect different parts of play.</p>
+</div>
+</div>
+<div class="rule-panel"><div class="panel-head"><div class="panel-title">Overview</div><div class="panel-ref">Section summary</div></div><div class="panel-body"><p>The game uses standard six-sided dice.</p><p>D6: roll one six-sided die.</p><p>D3: roll one D6 and halve the result, rounding up.</p><p>2D6 / 3D6: roll that many dice and add the results.</p><p>A Roll-Off is always both players rolling 2D6, with ties re-rolled.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">3.1 Re-Rolls</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>A re-roll replaces the original result, even if the new result is worse. Unless a rule says otherwise, a re-roll applies to one die.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">3.2 Tests</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>A test is a roll against a target number. There are two broad types:</p><ul class="text-list"><li>Characteristic tests: use a unit stat such as Armour or Evade.</li><li>Attribute tests: use a weapon or ability value such as Hit.</li><li>Not every die roll is a test. Some rolls only generate a value, such as a D3 result or a Charge roll.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">3.3 Modifiers</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Modifiers change the target number, not the die result.</p><p>+X modifier makes the roll easier by reducing the target number by X.</p><p>-X modifier makes the roll harder by increasing the target number by X.</p><p>Global Limits:</p><ul class="text-list"><li>A target number cannot be improved below 2+.</li><li>A target number cannot be worsened above 6+.</li><li>A natural 6 always succeeds.</li><li>A natural 1 always fails.</li><li>A null value (-) cannot be turned into a valid roll by modifiers.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">3.4 Fixed Additions</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Expressions such as D3+1 generate a value. They are not target-number modifiers.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">3.5 Cocked Dice</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>If a die does not land flat, or the result is not clear, re-roll it.</p><div class="crossref">RAW references: Part 3.</div></div></div>
+<div class="footer"><div>Dice Language · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>11</div></div>
+</div>
+</section>
+</div>
+<script src="../assets/js/core-book.js"></script>
+</body>
+</html>

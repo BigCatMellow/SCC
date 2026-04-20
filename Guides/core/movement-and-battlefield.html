@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>StarCraft TMG — Core Rules</title>
+<link rel="stylesheet" href="../assets/css/core-book.css" />
+</head>
+<body>
+<div class="site-nav"><nav><a href="../index.html">Library</a> <span class="sep">•</span> <a href="index.html">Core Index</a> <span class="sep">•</span> <a href="../factions/index.html">Factions</a></nav></div>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">Dark mode</button>
+<div class="book"><section class="page print-breathe" id="part-iii-measurement-movement-and-formation-control">
+<div class="inner">
+<div class="running"><div class="left">Part III</div><div class="right">Rules as Written Guide</div></div>
+<div class="part-kicker">Part III</div>
+<h1 class="part-title" id="part-iii-measurement-movement-and-formation-control-title">Measurement, Movement, and Formation Control</h1>
+<div class="hero-rule">
+<div class="label">Part scope</div>
+<div class="text">This part is the book’s movement engine. It defines how distance is measured, how the Leading Model controls repositioning, how coherency is rebuilt, and when space is legally passable.</div>
+</div>
+<div class="part-opener-grid">
+<div class="part-opener-card">
+<div class="head">Study use</div>
+<div class="title">Use this part for</div>
+<ul class="part-opener-list">
+<li>Reading movement actions as real path-and-end-position checks, not vague repositioning permission.</li>
+<li>Resolving coherency, gaps, and legal final placement before combat questions get involved.</li>
+</ul>
+</div>
+<div class="part-opener-card">
+<div class="head">Study anchor</div>
+<div class="title">Anchor sections</div>
+<ul class="part-opener-list">
+<li><a class="jump-link" href="#sec-iii-01-measurement-basics">Measurement basics</a></li>
+<li>Within / wholly within / Leading Model</li>
+<li>Coherency and gap clearance</li>
+</ul>
+</div>
+</div>
+<div class="part-opener-strip">
+<div class="head">Most likely misread</div>
+<div class="title">Read carefully</div>
+<p>This part punishes casual shortcuts: distance is horizontal where the rules say so, coherency is leader-anchored, and the base still has to physically fit.</p>
+</div>
+<div class="footer"><div>Part III - Measurement, Movement, and Formation Control · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>12</div></div>
+</div>
+</section>
+<section class="page print-tight" id="sec-iii-01-measurement-basics">
+<div class="inner">
+<div class="running"><div class="left">Part III - Measurement, Movement, and Formation Control</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">III.01</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part III</div>
+<div class="section-title" id="sec-iii-01-measurement-basics-title">Measurement Basics</div>
+</div>
+</div>
+<div class="lede">Start here for how distance works. Measurements are base-to-base, pre-measuring is always allowed, and elevation only matters when a rule says it does.</div>
+<div class="mistake-strip">
+<div class="head">Common mistake</div>
+<div class="title">Players often measure the model, not the base</div>
+<p>The rules object is the base. Wings, guns, scenic rocks, and model height do not create extra range by themselves unless a specific rule says otherwise.</p>
+</div>
+<details class="checkpoint">
+<summary>Check yourself • Does a tall scenic base change range?</summary>
+<div class="quiz-answer"><p><strong>No.</strong> The base is the rules object. Scenic height and pose do not change range by themselves.</p></div>
+<div class="flow-back"><a class="flow-link" href="#sec-iii-01-measurement-basics">Return to Measurement Basics ↑</a></div></details>
+<div class="rule-panel"><div class="panel-head"><div class="panel-title">4.1 Pre-Measuring</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Players may measure any distance at any time. There is no hidden-distance play.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">4.2 How To Measure</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Measure from the nearest point of one base to the nearest point of the other base.</p><p>Overhanging weapons, wings, or scenic elements do not count.</p><p>Base-to-base contact is 0".</p><p>Tokens and markers are measured to their nearest physical edge.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">4.3 Elevation And Distance</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Distances between models at different elevations are measured horizontally from a top-down view. Vertical height is ignored for range, engagement range, and most ability ranges.</p></div></div>
+<div class="study-questions">
+<div class="head">Quick check</div>
+<div class="title">Ask these before arguing about distance</div>
+<div class="body question-grid">
+<div class="question-cell"><span class="question-label">Question 1</span><p>Are both players measuring from the nearest point of each base rather than from the miniature itself?</p></div>
+<div class="question-cell"><span class="question-label">Question 2</span><p>Is the distance one of the rules cases that ignores vertical height and uses the horizontal top-down view?</p></div>
+</div>
+</div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-vi-01-line-of-sight">Line of Sight</a><a class="see-link" href="#sec-xii-02-mission-marker-control">Mission-Marker Control</a><a class="see-link" href="#sec-vi-03-effective-size-elevation-and-high-ground">Effective Size, Elevation, and High Ground</a></div>
+</div><div class="footer"><div>Measurement Basics · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>13</div></div>
+</div>
+</section>
+<section class="page print-tight" id="sec-iii-02-within-wholly-within-and-the-leading-model">
+<div class="inner">
+<div class="running"><div class="left">Part III - Measurement, Movement, and Formation Control</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">III.02</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part III</div>
+<div class="section-title" id="sec-iii-02-within-wholly-within-and-the-leading-model-title">Within, Wholly Within, and the Leading Model</div>
+</div>
+</div>
+<div class="lede">These three terms control a huge amount of placement logic. "Within" cares about any part of the base, "wholly within" cares about the full base, and the Leading Model sets the point the rest of the unit rebuilds around.</div>
+<div class="page-guide">
+<div class="page-guide-card">
+<div class="head">Page role</div>
+<div class="title">Placement Terms</div>
+<p>This page fixes the meaning of the most important range and movement terms before they are reused inside deployment, charge, and objective rules.</p>
+</div>
+<div class="page-guide-card">
+<div class="head">Read for</div>
+<div class="title">Which Part Of The Base Matters</div>
+<p>The difference between within, wholly within, and the Leading Model controls whether a later placement is just close enough or fully legal.</p>
+</div>
+</div>
+<div class="layout"><div><div class="rule-panel"><div class="panel-head"><div class="panel-title">5.1 Within</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>A model is within a distance if any part of its base touches or crosses that range. A unit is within if at least one of its models is within.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">5.2 Wholly Within</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>A model is wholly within only if its entire base lies inside the range. A unit is wholly within only if all its models satisfy that condition.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">5.3 The Leading Model</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Most movement is resolved through a leading model. When a unit moves, deploys, runs, charges, disengages, closes ranks, or otherwise repositions through standard movement:</p><ul class="text-list"><li>choose a leading model</li><li>move that model first and measure its exact path</li><li>then set the remaining models into legal coherency around it.</li><li>The leading model is a temporary movement reference, not a permanent role.</li></ul></div></div></div><aside><div class="aside raw"><div class="aside-head">RAW clarification note</div><p>When a later rule says a unit Moves, Runs, Charges, Deploys, Disengages, or Closes Ranks under standard move logic, carry the normal Leading Model restrictions with it unless that later rule gives a specific override. That includes path measurement, gap clearance, terrain, elevation, overlap, and legal end-position checks.</p></div></aside></div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-ix-02-movement-phase-actions">Movement Phase Actions</a><a class="see-link" href="#sec-x-04-charge">Charge</a><a class="see-link" href="#sec-xi-02-close-combat-attack">Close Combat Attack</a></div>
+</div><div class="footer"><div>Within, Wholly Within, and the Leading Model · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>14</div></div>
+</div>
+</section>
+<section class="page print-tight" id="sec-iii-03-coherency">
+<div class="inner">
+<div class="running"><div class="left">Part III - Measurement, Movement, and Formation Control</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">III.03</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part III</div>
+<div class="section-title" id="sec-iii-03-coherency-title">Coherency</div>
+</div>
+</div>
+<div class="lede">Coherency is the rule that keeps a unit functioning as one formation after it repositions. When the move ends, every model must still connect back to the Leading Model through a legal chain.</div>
+<div class="ruling-box">
+<div class="head">Worked ruling</div>
+<div class="title">A chain is not enough by itself</div>
+<div class="body">
+<p>If a rear model is within 3" of another model but the unit cannot trace a legal link back to the Leading Model through legal spaces, the unit is not in legal coherency at the end of the reposition.</p>
+</div>
+</div>
+<div class="margin-keywords">
+<div class="head">Margin reminder</div>
+<div class="title">The three coherency checks</div>
+<div class="body">
+<p>Ask these in order: distance to the Leading Model, legal link back through the unit, and whether every model can actually fit in a legal final position.</p>
+<div class="terms"><span class="term-chip">Leading Model</span><span class="term-chip">Wholly Within</span><span class="term-chip">Coherency Link</span><span class="term-chip">Legal Final Position</span></div>
+</div>
+</div><div class="raw-lens">
+<div class="head">Selective RAW lens</div>
+<div class="title">Coherency is two checks, not one</div>
+<div class="lens-block">
+<div class="lens-label">RAW says</div>
+<blockquote>“All models in the Unit must be Wholly Within 3\" of the Leading Model and able to trace a valid Coherency Link to it.”</blockquote>
+</div>
+<div class="lens-block">
+<div class="lens-label">Plain English</div>
+<p>Distance to the leader and legal link back through the unit are separate requirements. A model can be close enough and still fail the link test.</p>
+</div>
+<div class="lens-block">
+<div class="lens-label">Table effect</div>
+<p>At the table, check distance first, then ask whether the chain back to the Leading Model is legal through legal spaces.</p>
+</div>
+</div>
+<details class="checkpoint">
+<summary>Common misread • Why is this not just chain-to-the-next-model?</summary>
+<div class="quiz-answer"><p>Because this guide reads coherency as <strong>leader-anchored</strong> at the end of a repositioning action. The chain must be able to trace back to the Leading Model, not just to whichever model happens to be nearest.</p></div>
+<div class="flow-back"><a class="flow-link" href="#sec-iii-03-coherency">Return to Coherency ↑</a></div></details>
+<div class="layout"><div><div class="rule-panel"><div class="panel-head"><div class="panel-title">Overview</div><div class="panel-ref">Section summary</div></div><div class="panel-body"><ul class="text-list"><li>Coherency is checked when the reposition ends. Later casualties do not trigger a fresh coherency check by themselves.</li><li>If a model cannot be placed legally, remove it as a casualty.</li></ul><div class="minor-head">Coherency Link</div><p>A Coherency Link is a legal chain through models in the same unit. It cannot pass through other units, terrain, or gaps the Leading Model could not legally move through.</p><div class="minor-head">Why it matters</div><p>A unit that is out of coherency cannot control or contest mission markers.</p><div class="minor-head">Practical reminder</div><p>Move the Leading Model first, then rebuild the rest of the unit around it.</p></div></div></div><aside><div class="aside raw"><div class="aside-head">RAW clarification note</div><p>Coherency is leader-anchored, not free daisy-chaining. At the end of a repositioning action, every model must be wholly within 3" of the Leading Model and able to trace a legal Coherency Link back to it.</p><p>Casualties by themselves do not trigger a new coherency check later. A unit only becomes Out of Coherency if the condition was not met at the end of its last repositioning action.</p></div><div class="aside raw"><div class="aside-head">RAW clarification note</div><p>For non-Flying units, a Coherency Link cannot pass through models from other units, terrain, or a gap the Leading Model itself could not move through. For Flying units, the source gives a specific override: ignore terrain and allow links through other units.</p></div></aside></div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-ix-02-movement-phase-actions">Movement Phase Actions</a><a class="see-link" href="#sec-x-04-charge">Charge</a><a class="see-link" href="#sec-xii-02-mission-marker-control">Mission-Marker Control</a></div>
+</div><div class="footer"><div>Coherency · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>15</div></div>
+</div>
+</section>
+<section class="page print-tight" id="sec-iii-04-gap-clearance-terrain-passage-and-legal-movement-space">
+<div class="inner">
+<div class="running"><div class="left">Part III - Measurement, Movement, and Formation Control</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">III.04</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part III</div>
+<div class="section-title" id="sec-iii-04-gap-clearance-terrain-passage-and-legal-movement-space-title">Gap Clearance, Terrain Passage, and Legal Movement Space</div>
+</div>
+</div>
+<div class="lede">This section is about physical fit, not intent. A move is legal only if the Leading Model can pass through the route, avoid illegal overlaps, and end where the base actually fits.</div>
+<div class="page-guide">
+<div class="page-guide-card">
+<div class="head">Page role</div>
+<div class="title">Movement Legality</div>
+<p>This page is about whether space is actually passable, not whether a player wishes a move to happen.</p>
+</div>
+<div class="page-guide-card">
+<div class="head">Read for</div>
+<div class="title">Can The Base Really Fit</div>
+<p>A theoretical route is never enough by itself. Gap size, passable openings, and physical fit all still have to line up.</p>
+</div>
+</div>
+<div class="layout"><div><div class="rule-panel"><div class="panel-head"><div class="panel-title">7.1 Gap Clearance By Size</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>The leading model can pass through terrain gaps depending on unit size:</p><ul class="text-list"><li>Size 2 or lower: requires at least a 1" gap.</li><li>Size 3 or larger: requires at least a 3" gap.</li><li>Even if the gap is theoretically legal, the base still has to physically fit.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">7.2 What Counts As A Gap</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Openings such as archways, breaches, and doorways count as gaps if both players agreed they are passable during battlefield setup.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">7.3 Flying And Gap Clearance</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Flying units ignore gap-clearance restrictions during movement.</p><div class="crossref">RAW references: Part 4.6, Part 8.5.3.</div></div></div></div><aside><div class="aside raw"><div class="aside-head">RAW clarification note</div><p>Gap Clearance is not only for ordinary Move actions. Charge explicitly measures along the real path and follows Gap Clearance, and Close Ranks inherits the same logic because it tells you to move the Leading Model under standard move rules.</p></div></aside></div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-ix-02-movement-phase-actions">Movement Phase Actions</a><a class="see-link" href="#sec-x-04-charge">Charge</a><a class="see-link" href="#sec-xiv-02-high-impact-keyword-lessons">High-Impact Keyword Lessons</a></div>
+</div><div class="footer"><div>Gap Clearance, Terrain Passage, and Legal Movement Space · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>16</div></div>
+</div>
+</section>
+<section class="page" id="sec-iii-r-measurement-and-movement-recap">
+<div class="inner">
+<div class="running"><div class="left">Part III Recap</div><div class="right">Study Edition</div></div>
+<div class="section-band">
+<div class="section-number">III.R</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part III Recap</div>
+<div class="section-title" id="sec-iii-r-measurement-and-movement-recap-title">Measurement and Movement Recap</div>
+</div>
+</div>
+<div class="part-sub">Use this as a short study spread after reading Part III. It compresses the operating logic into a smaller set of checks you can actually remember at the table.</div>
+<div class="part-recap">
+<div class="head">Study recap</div>
+<div class="title">What to remember from Part III</div>
+<div class="body recap-grid">
+<div class="recap-cell"><span class="recap-label">In one sentence</span><p>Standard movement is really a legality test wrapped around the Leading Model.</p></div>
+<div class="recap-cell"><span class="recap-label">Most common error</span><p>Treating later model placement as free-form instead of checking legal fit, link, and final coherency.</p></div>
+<div class="recap-cell"><span class="recap-label">Memory hook</span><p>Base first, path second, final legality third.</p></div>
+<div class="recap-cell"><span class="recap-label">Read next</span><p>Part VI, where line of sight, terrain, and engagement start limiting what all that movement can actually achieve.</p></div>
+</div>
+</div>
+<details class="checkpoint">
+<summary>Check yourself • Can a unit be legal if the path worked but the last model cannot be placed?</summary>
+<div class="quiz-answer"><p><strong>No.</strong> A legal route is not enough by itself. The reposition still fails its final legality if the unit cannot end in legal coherency and legal physical positions.</p></div>
+<div class="flow-back"><a class="flow-link" href="#sec-iii-r-measurement-and-movement-recap">Return to Measurement and Movement Recap ↑</a></div></details>
+<div class="footer"><div>Part III Study Recap · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>R-1</div></div>
+</div>
+</section>
+<section class="page print-breathe" id="part-iv-reading-the-cards-correctly">
+<div class="inner">
+<div class="running"><div class="left">Part IV</div><div class="right">Rules as Written Guide</div></div>
+<div class="part-kicker">Part IV</div>
+<h1 class="part-title" id="part-iv-reading-the-cards-correctly-title">Reading the Cards Correctly</h1>
+<div class="hero-rule">
+<div class="label">Part scope</div>
+<div class="text">This part teaches the reader how cards communicate rules. It separates unit-card characteristics from battlefield procedure and shows how non-unit cards shape list building, setup, and live play.</div>
+</div>
+<div class="part-opener-grid">
+<div class="part-opener-card">
+<div class="head">Study use</div>
+<div class="title">Use this part for</div>
+<ul class="part-opener-list">
+<li>Checking what a card field actually means before applying it on the table.</li>
+<li>Separating unit, upgrade, tactical, faction, mission, and deployment functions.</li>
+</ul>
+</div>
+<div class="part-opener-card">
+<div class="head">Study anchor</div>
+<div class="title">Anchor sections</div>
+<ul class="part-opener-list">
+<li><a class="jump-link" href="#sec-iv-01-unit-cards">Unit cards</a></li>
+<li>Split speed and null values</li>
+<li>Upgrades, tactical, faction, mission, and deployment cards</li>
+</ul>
+</div>
+</div>
+<div class="part-opener-strip">
+<div class="head">Most likely misread</div>
+<div class="title">Read carefully</div>
+<p>The two common traps here are treating split values too loosely and forgetting that a null characteristic usually means the capability does not exist at all.</p>
+</div>
+<div class="footer"><div>Part IV - Reading the Cards Correctly · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>17</div></div>
+</div>
+</section>
+<section class="page print-tightest" id="sec-iv-01-unit-cards">
+<div class="inner">
+<div class="running"><div class="left">Part IV - Reading the Cards Correctly</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">IV.01</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part IV</div>
+<div class="section-title" id="sec-iv-01-unit-cards-title">Unit Cards</div>
+</div>
+</div>
+<div class="lede">Read unit cards as rules objects, not just stat blocks. Each field tells you something different about movement, defense, battlefield role, weapons, or timing.</div><div class="raw-lens">
+<div class="head">Selective RAW lens</div>
+<div class="title">Null Speed and PLACE</div>
+<div class="lens-block">
+<div class="lens-label">RAW says</div>
+<blockquote>“Null Value (-): The Unit cannot move or be repositioned by any means, including PLACE and involuntary movement effects.”</blockquote>
+</div>
+<div class="lens-block">
+<div class="lens-label">Plain English</div>
+<p>A dash in Speed is a general shutdown of movement and repositioning. It is broader than “cannot take a normal Move.”</p>
+</div>
+<div class="lens-block">
+<div class="lens-label">Table effect</div>
+<p>When a card uses PLACE, do not assume that PLACE automatically overrides Speed -. First look for a specific override that says this effect still works.</p>
+</div>
+</div>
+<div class="page-guide">
+<div class="page-guide-card">
+<div class="head">Page role</div>
+<div class="title">Card Reading</div>
+<p>Use this page to understand how a unit card communicates battlefield capabilities before those values appear inside later sequences.</p>
+</div>
+<div class="page-guide-card">
+<div class="head">Read for</div>
+<div class="title">Field Meaning</div>
+<p>Treat each line on the card as a rules field with a job, not as general flavor text about the unit.</p>
+</div>
+</div>
+<div class="layout"><div><div class="rule-panel"><div class="panel-head"><div class="panel-title">Overview</div><div class="panel-ref">Section summary</div></div><div class="panel-body"><p>A unit card tells you:</p><ul class="text-list"><li>Unit Name</li><li>Speed</li><li>Evade</li><li>Armour</li><li>Hit Points</li><li>Shields (If Present)</li><li>Size</li><li>Supply Profile</li><li>Phase-Limited Abilities</li><li>Weapon Profiles</li><li>Combat Tags</li><li>Faction Tags</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">8.1 Split Speed Values</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>If a unit has a split speed like 4"/7", use the second value only when:</p><ul class="text-list"><li>the unit has been reduced to one model, or</li><li>it started the game as a single-model unit.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">8.2 Null Values</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>If a characteristic shows -, that capability does not exist. Examples:</p><p>a unit with Evade - cannot make Evade rolls</p><p>a unit with Speed - cannot move or be repositioned by any means, including PLACE, unless a more specific rule overrides the general movement restriction.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">8.3 Shields</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>If a shield value is present:</p><ul class="text-list"><li>the first model gains those shield points in addition to HP</li><li>the unit has the Shielded status while the shield remains</li><li>losing the shielded status does not erase the model’s normal HP.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">8.4 Weapon Profiles</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Weapon profiles specify:</p><ul class="text-list"><li>phase of use</li><li>range</li><li>valid target type</li><li>rate of attack (RoA)</li><li>hit number</li><li>surge type</li><li>surge dice</li><li>damage</li><li>keywords.</li><li>Melee weapons use E for engagement range. Template weapons use FT or BT.</li></ul></div></div></div><aside><div class="aside raw"><div class="aside-head">RAW clarification note</div><p>A null Speed value does more than stop a normal Move. RAW treats Speed - as a general inability to move or be repositioned by any means, including PLACE, unless a more specific rule explicitly overrides that restriction.</p></div></aside></div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-x-02-ranged-attack-structure">Ranged Attack Structure</a><a class="see-link" href="#sec-xiv-02-high-impact-keyword-lessons">High-Impact Keyword Lessons</a><a class="see-link" href="#sec-xiii-01-universal-ability-structure">Universal Ability Structure</a></div>
+</div><div class="footer"><div>Unit Cards · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>18</div></div>
+</div>
+</section>
+<section class="page print-tight" id="sec-iv-02-upgrades-tactical-cards-faction-cards-mission-cards-and-deployment-cards">
+<div class="inner">
+<div class="running"><div class="left">Part IV - Reading the Cards Correctly</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">IV.02</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part IV</div>
+<div class="section-title" id="sec-iv-02-upgrades-tactical-cards-faction-cards-mission-cards-and-deployment-cards-title">Upgrades, Tactical Cards, Faction Cards, Mission Cards, and Deployment Cards</div>
+</div>
+</div>
+<div class="lede">The non-unit cards do different jobs, and the differences matter. Some affect army construction, some shape setup, and some create live rules on the table.</div>
+<div class="page-guide">
+<div class="page-guide-card">
+<div class="head">Page role</div>
+<div class="title">Non-Unit Card Roles</div>
+<p>This page separates the different jobs played by upgrades, tactical cards, faction cards, mission cards, and deployment cards.</p>
+</div>
+<div class="page-guide-card">
+<div class="head">Read for</div>
+<div class="title">Function By Card Type</div>
+<p>The key is not memorizing every card at once, but knowing whether a card changes list building, setup, or live battlefield play.</p>
+</div>
+</div>
+<div class="rule-panel"><div class="panel-head"><div class="panel-title">9.1 Upgrades</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Unit-card backs list upgrades purchased during army building. Important upgrade language:</p><ul class="text-list"><li>↑ FOR [weapon] means full replacement.</li><li>specialist upgrades can create separate attack batches because different models now carry different weapons.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">9.2 Tactical Cards</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Tactical cards are bought with Vespene Gas. They can:</p><ul class="text-list"><li>unlock additional army slots</li><li>provide a faction resource when exhausted</li><li>grant active, passive, or reaction abilities.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">9.3 Faction Cards</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Every army must include exactly one faction card. It provides:</p><ul class="text-list"><li>faction identity</li><li>starting army slots</li><li>a faction resource type</li><li>faction abilities.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">9.4 Mission Cards</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Mission cards define:</p><ul class="text-list"><li>Starting Supply</li><li>Supply Escalation</li><li>Game Length</li><li>Scoring</li><li>Special Conditions</li><li>Special Win Conditions</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">9.5 Deployment Cards</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Deployment cards define:</p><ul class="text-list"><li>battlefield dimensions</li><li>entry edges</li><li>zones of influence</li><li>mission-marker coordinates.</li></ul><div class="crossref">RAW references: Part 5.</div></div></div>
+<div class="footer"><div>Upgrades, Tactical Cards, Faction Cards, Mission Cards, and Deployment Cards · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>19</div></div>
+</div>
+</section>
+<section class="page print-breathe" id="part-v-supply-and-battlefield-presence">
+<div class="inner">
+<div class="running"><div class="left">Part V</div><div class="right">Rules as Written Guide</div></div>
+<div class="part-kicker">Part V</div>
+<h1 class="part-title" id="part-v-supply-and-battlefield-presence-title">Supply and Battlefield Presence</h1>
+<div class="hero-rule">
+<div class="label">Part scope</div>
+<div class="text">This part shifts supply from an army-building number to a live battlefield value. It explains how current supply changes with casualties and why that matters for control, reserves, and disengage pressure.</div>
+</div>
+<div class="part-opener-grid">
+<div class="part-opener-card">
+<div class="head">Study use</div>
+<div class="title">Use this part for</div>
+<ul class="part-opener-list">
+<li>Reading current supply from the profile actually in play, not from a unit’s starting size.</li>
+<li>Understanding why reduced units still matter even when their battlefield weight drops.</li>
+</ul>
+</div>
+<div class="part-opener-card">
+<div class="head">Study anchor</div>
+<div class="title">Anchor sections</div>
+<ul class="part-opener-list">
+<li><a class="jump-link" href="#sec-v-01-supply-profile-and-current-supply">Supply profile and current supply</a></li>
+<li>Why supply matters so much</li>
+<li>Supply 0 and flying exceptions</li>
+</ul>
+</div>
+</div>
+<div class="part-opener-strip">
+<div class="head">Most likely misread</div>
+<div class="title">Read carefully</div>
+<p>Supply is recalculated during play. It is not just a roster cost, and Supply 0 is weaker than normal without meaning automatically irrelevant.</p>
+</div>
+<div class="footer"><div>Part V - Supply and Battlefield Presence · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>20</div></div>
+</div>
+</section>
+<section class="page print-tight" id="sec-v-01-supply-profile-and-current-supply">
+<div class="inner">
+<div class="running"><div class="left">Part V - Supply and Battlefield Presence</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">V.01</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part V</div>
+<div class="section-title" id="sec-v-01-supply-profile-and-current-supply-title">Supply Profile and Current Supply</div>
+</div>
+</div>
+<div class="lede">Supply changes during play as a unit loses models. Read current supply from the profile the unit is actually in, not from its starting size.</div>
+<div class="page-guide">
+<div class="page-guide-card">
+<div class="head">Page role</div>
+<div class="title">Live Battlefield Value</div>
+<p>This page moves supply out of roster math and into active battlefield consequences like control, reserves, and disengage pressure.</p>
+</div>
+<div class="page-guide-card">
+<div class="head">Read for</div>
+<div class="title">Current, Not Starting</div>
+<p>Always read supply from the unit’s current profile bracket, because casualties change what the unit counts for right now.</p>
+</div>
+</div>
+<div class="rule-panel"><div class="panel-head"><div class="panel-title">Overview</div><div class="panel-ref">Section summary</div></div><div class="panel-body"><p>Every unit has a supply profile that links model count to current supply value.</p><p>As casualties reduce the unit to a lower bracket, its current supply changes immediately.</p><p>This matters because supply is used for:</p><ul class="text-list"><li>Deployment From Reserves</li><li>Mission-Marker Control</li><li>Disengage Checks</li><li>Some Strategic Planning Decisions.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">10.1 Why Supply Matters So Much</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Supply is not just an army-building value. It is a live battlefield value. A reduced unit:</p><ul class="text-list"><li>Costs Less Supply On The Table</li><li>May Free Supply For Reinforcements</li><li>Counts For Less When Controlling Objectives</li><li>May Be Weaker At Disengaging.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">10.2 Supply 0 Still Matters</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>A unit with supply 0 can still control a mission marker if no enemy unit contests it.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">10.3 Supply And Flying Units</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Flying units cannot control or contest mission markers, regardless of supply.</p><div class="crossref">RAW references: Parts 6.1-6.2, 8.9.1.</div></div></div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-ix-01-reserves-and-the-supply-pool">Reserves and the Supply Pool</a><a class="see-link" href="#sec-xii-02-mission-marker-control">Mission-Marker Control</a><a class="see-link" href="#sec-ix-02-movement-phase-actions">Movement Phase Actions</a></div>
+</div><div class="footer"><div>Supply Profile and Current Supply · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>21</div></div>
+</div>
+</section>
+<section class="page print-breathe" id="part-vi-line-of-sight-cover-engagement-and-terrain-logic">
+<div class="inner">
+<div class="running"><div class="left">Part VI</div><div class="right">Rules as Written Guide</div></div>
+<div class="part-kicker">Part VI</div>
+<h1 class="part-title" id="part-vi-line-of-sight-cover-engagement-and-terrain-logic-title">Line of Sight, Cover, Engagement, and Terrain Logic</h1>
+<div class="hero-rule">
+<div class="label">Part scope</div>
+<div class="text">This part is the densest battlefield logic in the guide. It ties together visibility, cover, effective size, elevation, engagement, and terrain interactions that often get misread when treated separately.</div>
+</div>
+<div class="part-opener-grid">
+<div class="part-opener-card">
+<div class="head">Study use</div>
+<div class="title">Use this part for</div>
+<ul class="part-opener-list">
+<li>Resolving whether a target is actually visible before worrying about attack quality.</li>
+<li>Separating line of sight, cover, engagement, and flying exceptions instead of blending them together.</li>
+</ul>
+</div>
+<div class="part-opener-card">
+<div class="head">Study anchor</div>
+<div class="title">Anchor sections</div>
+<ul class="part-opener-list">
+<li>Line of sight and terrain footprint</li>
+<li>Cover and effective size</li>
+<li>Engagement restrictions and flying</li>
+</ul>
+</div>
+</div>
+<div class="part-opener-strip">
+<div class="head">Most likely misread</div>
+<div class="title">Read carefully</div>
+<p>Crossing blocking terrain is not the same thing as being hidden, and Flying removes some restrictions here, not all of them.</p>
+</div>
+<div class="footer"><div>Part VI - Line of Sight, Cover, Engagement, and Terrain Logic · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>22</div></div>
+</div>
+</section>
+<section class="page print-tightest" id="sec-vi-01-line-of-sight">
+<div class="inner">
+<div class="running"><div class="left">Part VI - Line of Sight, Cover, Engagement, and Terrain Logic</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">VI.01</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part VI</div>
+<div class="section-title" id="sec-vi-01-line-of-sight-title">Line of Sight</div>
+</div>
+</div>
+<div class="lede">Line of sight is a visibility check, not a sculpt check. Read it from above, base to base, using terrain and effective size rather than pose or model height.</div><div class="raw-lens">
+<div class="head">Selective RAW lens</div>
+<div class="title">A movement opening is not automatically a sight line</div>
+<div class="lens-block">
+<div class="lens-label">RAW says</div>
+<blockquote>“Unless players agree otherwise during Battlefield Setup, gaps, windows, doorways, and open interiors within the footprint do block the Line of Sight.”</blockquote>
+</div>
+<div class="lens-block">
+<div class="lens-label">Plain English</div>
+<p>The default assumption is visually closed, not visually open. Table agreements can change that, but only if players set them in advance.</p>
+</div>
+<div class="lens-block">
+<div class="lens-label">Table effect</div>
+<p>A doorway can count as a legal movement gap while still blocking line of sight. Decide those exceptions during setup, not in the middle of an attack.</p>
+</div>
+</div><div class="mistake-strip">
+<div class="head">Common misread</div>
+<div class="title">A movement opening is not automatically a sight line</div>
+<p>Players often assume that if a model can move through a window, breach, or doorway, it can also see through it. RAW does not do that by default. Movement passability and line-of-sight passability are separate agreements.</p>
+</div>
+<div class="layout"><div><div class="rule-panel"><div class="panel-head"><div class="panel-title">Overview</div><div class="panel-ref">Section summary</div></div><div class="panel-body"><p>To check visibility:</p><ul class="text-list"><li>trace a straight line from any part of the attacker’s base to any part of the target’s base</li><li>evaluate the terrain the line crosses.</li><li>If the line does not pass through blocking terrain, the target is visible.</li><li>If the line does pass through blocking terrain, visibility depends on the cover rules.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">11.1 Terrain Footprint</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>For LoS, a terrain footprint is its base or the outermost edge of its solid structure viewed from above.</p><p>Unless players agreed otherwise during setup, windows, doorways, and interior openings still block line of sight if they are inside that footprint.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">11.2 Blocking Terrain</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Any terrain with effective size 1 or greater is blocking terrain. Whether it truly blocks a given shot depends on the cover rules.</p></div></div></div><aside><div class="aside raw"><div class="aside-head">RAW clarification note</div><p>A passable opening for movement is not automatically open for Line of Sight. RAW says windows, doorways, gaps, and open interiors inside a terrain footprint still block LoS unless players agreed otherwise during battlefield setup.</p></div><div class="aside raw"><div class="aside-head">RAW clarification note</div><p>Blocking Terrain is any terrain piece with Effective Size 1 or greater. Tokens are handled elsewhere as terrain of Size 0, so they do not become Blocking Terrain unless a more specific rule says they do.</p></div></aside></div><div class="decision-ladder">
+<div class="head">Sight check</div>
+<div class="title">Ask the line-of-sight questions in this order</div>
+<div class="body ladder-grid">
+<div class="ladder-cell"><span class="ladder-label">1 • Trace</span><p>Can you draw a straight base-to-base line in top-down view?</p></div>
+<div class="ladder-cell"><span class="ladder-label">2 • Crossing</span><p>Does that line cross Blocking Terrain at all?</p></div>
+<div class="ladder-cell"><span class="ladder-label">3 • Cover test</span><p>If it crosses terrain, does one actual piece qualify as Full Cover or Direct Cover?</p></div>
+<div class="ladder-cell"><span class="ladder-label">4 • Result</span><p>If no single piece passes that cover test, the target stays Visible even though terrain was crossed.</p></div>
+</div>
+</div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-vi-02-cover">Cover</a><a class="see-link" href="#sec-vi-03-effective-size-elevation-and-high-ground">Effective Size, Elevation, and High Ground</a><a class="see-link" href="#sec-x-02-ranged-attack-structure">Ranged Attack Structure</a></div>
+</div><div class="footer"><div>Line of Sight · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>23</div></div>
+</div>
+</section>
+<section class="page print-tightest" id="sec-vi-02-cover">
+<div class="inner">
+<div class="running"><div class="left">Part VI - Line of Sight, Cover, Engagement, and Terrain Logic</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">VI.02</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part VI</div>
+<div class="section-title" id="sec-vi-02-cover-title">Cover</div>
+</div>
+</div>
+<div class="lede">Cover asks whether terrain merely lies between the models or actually changes visibility. The key split is between Full Cover and Direct Cover, and that split decides whether the target disappears or remains attackable.</div>
+<div class="mistake-strip">
+<div class="head">Common misread</div>
+<div class="title">Crossing terrain is not automatically enough</div>
+<p>The line has to cross blocking terrain, and then one specific terrain piece still has to qualify as either Full Cover or Direct Cover. If no single terrain piece meets those tests, the target remains visible.</p>
+</div>
+<div class="example-grid">
+<div class="example-card">
+<div class="head">Worked example</div>
+<div class="title">Full cover</div>
+<p>If the same terrain piece is effectively as tall as both attacker and target, and the shot crosses it, line of sight is blocked outright.</p>
+</div>
+<div class="example-card">
+<div class="head">Worked example</div>
+<div class="title">Direct cover</div>
+<p>If the line crosses terrain and one of the models is within 1" of that terrain, check whether that one terrain piece is large enough to block through direct cover.</p>
+</div>
+</div>
+<details class="checkpoint">
+<summary>Check yourself • Do multiple small terrain pieces combine into one bigger cover wall?</summary>
+<div class="quiz-answer"><p><strong>No.</strong> Each terrain piece is tested on its own. You do not add terrain sizes together to create cover from several pieces that each fail on their own.</p></div>
+<div class="flow-back"><a class="flow-link" href="#sec-vi-02-cover">Return to Cover ↑</a></div></details>
+<div class="layout"><div><div class="rule-panel"><div class="panel-head"><div class="panel-title">Overview</div><div class="panel-ref">Section summary</div></div><div class="panel-body"><p>There are two main ways terrain blocks line of sight:</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">12.1 Full Cover</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>A terrain piece blocks line of sight if its effective size is equal to or greater than the effective size of both the attacker and the target.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">12.2 Direct Cover</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>If the LoS line passes through terrain and either the attacker or target is within 1" of that terrain, line of sight is blocked if the terrain’s effective size is equal to or greater than the effective size of the model that is within 1".</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">12.3 Close-Quarters Exception</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>If both models are within 1" of the same terrain piece and within 3" of each other, direct cover does not apply. Resolve line of sight normally.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">12.4 Terrain Pieces Do Not Combine</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Each terrain piece is evaluated independently. You never add the size or “cover effect” of multiple terrain pieces together to create cover.</p></div></div></div><aside><div class="aside raw"><div class="aside-head">RAW clarification note</div><p>Crossing Blocking Terrain is not enough by itself to hide a target. RAW resolves visibility in two steps: first ask whether the line crosses Blocking Terrain, then ask whether one terrain piece actually qualifies as Full Cover or Direct Cover. If no single terrain piece meets either test, the target remains Visible.</p><p>Direct Cover is also two-way through the same terrain piece. If that terrain blocks the shot, neither model has Line of Sight to the other through it. This is a visibility rule, not just a defensive bonus.</p></div></aside></div>
+<div class="decision-ladder">
+<div class="head">Decision ladder</div>
+<div class="title">Read cover in two passes</div>
+<div class="body ladder-grid">
+<div class="ladder-cell"><span class="ladder-label">Pass 1</span><p>Does the LoS line cross Blocking Terrain at all?</p></div>
+<div class="ladder-cell"><span class="ladder-label">Pass 2</span><p>If yes, does one terrain piece meet Full Cover or Direct Cover on its own?</p></div>
+<div class="ladder-cell"><span class="ladder-label">If no</span><p>No crossing terrain means no terrain-based visibility block.</p></div>
+<div class="ladder-cell"><span class="ladder-label">If still no</span><p>Crossing terrain without a qualifying cover test still leaves the target visible.</p></div>
+</div>
+</div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-vi-01-line-of-sight">Line of Sight</a><a class="see-link" href="#sec-vi-03-effective-size-elevation-and-high-ground">Effective Size, Elevation, and High Ground</a><a class="see-link" href="#sec-xiv-02-high-impact-keyword-lessons">High-Impact Keyword Lessons</a></div>
+</div><div class="footer"><div>Cover · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>24</div></div>
+</div>
+</section>
+<section class="page print-tight" id="sec-vi-03-effective-size-elevation-and-high-ground">
+<div class="inner">
+<div class="running"><div class="left">Part VI - Line of Sight, Cover, Engagement, and Terrain Logic</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">VI.03</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part VI</div>
+<div class="section-title" id="sec-vi-03-effective-size-elevation-and-high-ground-title">Effective Size, Elevation, and High Ground</div>
+</div>
+</div>
+<div class="lede">Effective size and elevation are the numbers behind many battlefield calls. They shape line of sight, cover, and high-ground benefits, and terrain can change how those calls resolve.</div>
+<div class="page-guide">
+<div class="page-guide-card">
+<div class="head">Page role</div>
+<div class="title">Height Logic</div>
+<p>This page explains the size-and-height layer that feeds line of sight, cover, and high-ground interactions.</p>
+</div>
+<div class="page-guide-card">
+<div class="head">Read for</div>
+<div class="title">Which Number Matters</div>
+<p>The game cares about effective size and defined elevation states, not a miniature’s literal pose or dramatic silhouette.</p>
+</div>
+</div>
+<div class="rule-panel"><div class="panel-head"><div class="panel-title">13.1 Effective Size</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Effective size is the size value that matters for LoS and cover interactions.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">13.2 Elevation Categories</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>The rules use three elevation states:</p><ul class="text-list"><li>GROUND LEVEL</li><li>MID GROUND</li><li>HIGH GROUND</li></ul><p>A model is on an elevation only if its entire base is on that elevation. If the base spans multiple levels, treat it as standing on the lowest level it occupies.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">13.3 Access Points</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Models change elevation only through an agreed ACCESS POINT, unless a more specific rule says otherwise.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">13.4 High Ground Cover</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>High ground can grant an Evade benefit under the battlefield rules. Flying units never benefit from the high-ground cover bonus, regardless of physical position.</p></div></div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-vi-01-line-of-sight">Line of Sight</a><a class="see-link" href="#sec-vi-02-cover">Cover</a><a class="see-link" href="#sec-vi-04-engagement-and-engagement-restrictions">Engagement and Engagement Restrictions</a></div>
+</div><div class="footer"><div>Effective Size, Elevation, and High Ground · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>25</div></div>
+</div>
+</section>
+<section class="page print-tightest" id="sec-vi-04-engagement-and-engagement-restrictions">
+<div class="inner">
+<div class="running"><div class="left">Part VI - Line of Sight, Cover, Engagement, and Terrain Logic</div><div class="right">Rules as Written Guide</div></div>
+<div class="section-band">
+<div class="section-number">VI.04</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part VI</div>
+<div class="section-title" id="sec-vi-04-engagement-and-engagement-restrictions-title">Engagement and Engagement Restrictions</div>
+</div>
+</div>
+<div class="lede">Engagement is a formal battlefield state with downstream consequences. Once it exists, it changes movement, targeting, and who must act later in combat.</div>
+<details class="checkpoint">
+<summary>Common mistake • If two bases are within 1", are they always engaged?</summary>
+<div class="quiz-answer"><p><strong>No.</strong> Distance is only one gate. Terrain, flying status, and elevation restrictions can still stop engagement from existing.</p></div>
+<div class="flow-back"><a class="flow-link" href="#sec-vi-04-engagement-and-engagement-restrictions">Return to Engagement and Engagement Restrictions ↑</a></div></details><div class="ruling-box">
+<div class="head">Worked ruling</div>
+<div class="title">Treat engagement like a gated state, not a distance shortcut</div>
+<div class="body">
+<p>Being within 1" only opens the first gate. You still need compatible tags, a legal terrain relationship, and an allowed elevation relationship before engagement actually exists.</p>
+<p>This is why many table disputes sound like range disputes but are really terrain or elevation disputes.</p>
+</div>
+</div>
+<div class="layout"><div><div class="rule-panel"><div class="panel-head"><div class="panel-title">14.1 Engagement Range</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Engagement range extends 1" horizontally from any model’s base.</p><p>When any model in one unit is within 1" of any model in an enemy unit, both units are engaged, provided the engagement restrictions are satisfied.</p></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">14.2 Engagement Restrictions</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Engagement only exists when:</p><ul class="text-list"><li>combat tags are compatible</li><li>terrain does not prevent engagement</li><li>elevation relationships allow it.</li></ul><p>Examples:</p><ul class="text-list"><li>Ground models engage Ground models.</li><li>Flying models are never engaged.</li><li>Size 2+ terrain blocks engagement through it.</li><li>High ground and ground level do not engage each other directly.</li><li>Mid ground can engage up or down only through the same access point link structure described in the rules.</li></ul></div></div><div class="rule-panel"><div class="panel-head"><div class="panel-title">14.3 Flying And Engagement</div><div class="panel-ref">Rule text</div></div><div class="panel-body"><p>Flying units:</p><ul class="text-list"><li>are never engaged</li><li>never participate in the Combat Phase</li><li>cannot be chosen as close-combat targets.</li></ul><div class="crossref">RAW references: Part 7.</div></div></div></div><aside><div class="aside raw"><div class="aside-head">RAW clarification note</div><p>The MID GROUND access-point clause is a likely dispute point. When terrain uses linked access points, agree during setup which access point network a model is adjacent to so later engagement checks stay consistent.</p><p>Engagement is also tag-locked. Ground models Engage Ground models only. Flying models are never Engaged.</p><p>Size 2+ terrain can block engagement even when the models are within 1" horizontally. Proximity by itself is not enough if terrain sits between them in a way the engagement rules forbid.</p><p>Flying changes engagement only. It does not cancel ordinary target, range, or visibility rules. A Flying unit being “never Engaged” does not make every attack against or by it automatically legal.</p></div><div class="aside raw"><div class="aside-head">RAW clarification note</div><p>Flying ignores Full Cover only. RAW still allows Direct Cover and the Elevation Dead Zone to block visibility against Flying units. Flying also still has an end-position spacing rule: a Flying unit must finish movement at least 1" away from enemy Flying units.</p></div></aside></div><div class="decision-ladder">
+<div class="head">Engagement check</div>
+<div class="title">Use this order before you call two units engaged</div>
+<div class="body ladder-grid">
+<div class="ladder-cell"><span class="ladder-label">1 • Distance</span><p>Are the relevant bases within 1" horizontally?</p></div>
+<div class="ladder-cell"><span class="ladder-label">2 • Tags</span><p>Are the combat tags compatible, or is one side Flying and therefore never Engaged?</p></div>
+<div class="ladder-cell"><span class="ladder-label">3 • Terrain</span><p>Is Size 2+ terrain or another terrain rule blocking engagement through that space?</p></div>
+<div class="ladder-cell"><span class="ladder-label">4 • Elevation</span><p>Do the elevation rules actually allow engagement between those positions or access points?</p></div>
+</div>
+</div>
+<div class="see-also-panel">
+<div class="head">See also</div>
+<div class="title">Related rule clusters</div>
+<div class="see-links"><a class="see-link" href="#sec-x-02-ranged-attack-structure">Ranged Attack Structure</a><a class="see-link" href="#sec-x-04-charge">Charge</a><a class="see-link" href="#sec-xi-02-close-combat-attack">Close Combat Attack</a></div>
+</div><div class="footer"><div>Engagement and Engagement Restrictions · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>26</div></div>
+</div>
+</section>
+<section class="page" id="sec-vi-r-sight-cover-and-engagement-recap">
+<div class="inner">
+<div class="running"><div class="left">Part VI Recap</div><div class="right">Study Edition</div></div>
+<div class="section-band">
+<div class="section-number">VI.R</div>
+<div class="section-title-wrap">
+<div class="section-kicker">Part VI Recap</div>
+<div class="section-title" id="sec-vi-r-sight-cover-and-engagement-recap-title">Sight, Cover, and Engagement Recap</div>
+</div>
+</div>
+<div class="part-sub">This is the battlefield-logic part most likely to create disputes. The short version is that visibility, protection, and engagement are separate checks that only overlap sometimes.</div>
+<div class="part-recap">
+<div class="head">Study recap</div>
+<div class="title">What to remember from Part VI</div>
+<div class="body recap-grid">
+<div class="recap-cell"><span class="recap-label">Line of sight</span><p>Ask whether a base-to-base line exists through the footprint from a top-down view.</p></div>
+<div class="recap-cell"><span class="recap-label">Cover</span><p>Do not improvise “partial cover.” Use Full Cover or Direct Cover exactly as written.</p></div>
+<div class="recap-cell"><span class="recap-label">Engagement</span><p>Horizontal 1" proximity is not enough by itself if tags, terrain, or elevation restrictions block engagement.</p></div>
+<div class="recap-cell"><span class="recap-label">Read next</span><p>Part VIII and Part X, where those same battlefield checks feed straight into alternating activation and attack legality.</p></div>
+</div>
+</div>
+<details class="checkpoint">
+<summary>Check yourself • Does being within 1" always mean two units are engaged?</summary>
+<div class="quiz-answer"><p><strong>No.</strong> Engagement still depends on compatible tags and on terrain and elevation restrictions. Physical closeness alone is not the whole rule.</p></div>
+<div class="flow-back"><a class="flow-link" href="#sec-vi-r-sight-cover-and-engagement-recap">Return to Sight, Cover, and Engagement Recap ↑</a></div></details>
+<div class="footer"><div>Part VI Study Recap · <a class="footer-contents-link" href="../index.html#contents">Contents</a></div><div>R-2</div></div>
+</div>
+</section>
+</div>
+<script src="../assets/js/core-book.js"></script>
+</body>
+</html>
