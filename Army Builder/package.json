@@ -1,0 +1,17 @@
+{
+  "name": "starcraft-tmg-runtime",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "extract:rules": "node ./scripts/extract_rules_reference.mjs",
+    "generate:glossary": "node ./scripts/generate_glossary_reference.mjs",
+    "generate:glossary-page": "node ./scripts/generate_glossary_page.mjs",
+    "generate:missions": "node ./scripts/generate_mission_setup_payload.mjs",
+    "generate:payloads": "node ./scripts/generate_browser_payloads.mjs",
+    "generate:upgrades": "node ./scripts/generate_upgrade_cost_overrides.mjs",
+    "generate:packages": "node ./scripts/enrich_advice_packages_with_ids.mjs",
+    "rebuild:runtime": "node ./scripts/rebuild_and_validate_runtime.mjs",
+    "validate:runtime": "node ./scripts/validate_runtime_against_rules.mjs",
+    "smoke:site": "node ./scripts/smoke_check_site_runtime.mjs"
+  }
+}

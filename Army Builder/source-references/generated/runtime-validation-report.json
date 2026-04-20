@@ -1,0 +1,532 @@
+{
+  "generatedAt": "2026-04-17T14:20:21.290Z",
+  "factions": {
+    "zerg": {
+      "counts": {
+        "runtime": {
+          "factionCards": 2,
+          "units": 12,
+          "weapons": 18,
+          "abilities": 72,
+          "tacticalCards": 11,
+          "upgrades": 49
+        },
+        "expected": {
+          "factionCards": 2,
+          "units": 12,
+          "tacticalCards": 11
+        }
+      },
+      "issues": [
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Corpser (Roach)",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 1",
+              "expected": "3"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 250
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Hydralisk",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 1",
+              "expected": "2"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 140
+            },
+            {
+              "field": "supply",
+              "actual": 1,
+              "expected": 2
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Kerrigan",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "-",
+              "expected": "1"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 250
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Kerrigan Swarm Raptor (Zergling)",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 3",
+              "expected": "6"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 250
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Queen",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "-",
+              "expected": "1"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 150
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Raptor (Zergling)",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 6",
+              "expected": "12"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 240
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Roach",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 1",
+              "expected": "3"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 170
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Swarmling (Zergling)",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 6",
+              "expected": "18"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 270
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Vile (Roach)",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 1",
+              "expected": "3"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 200
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Zergling",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 6",
+              "expected": "12"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 180
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        }
+      ]
+    },
+    "protoss": {
+      "counts": {
+        "runtime": {
+          "factionCards": 2,
+          "units": 7,
+          "weapons": 10,
+          "abilities": 45,
+          "tacticalCards": 10,
+          "upgrades": 22
+        },
+        "expected": {
+          "factionCards": 2,
+          "units": 7,
+          "tacticalCards": 10
+        }
+      },
+      "issues": [
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Adept",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 2",
+              "expected": "4"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 150
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Artanis",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "-",
+              "expected": "1"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 250
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Praetor Guard (Zealot)",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 1",
+              "expected": "3"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 280
+            },
+            {
+              "field": "supply",
+              "actual": 1,
+              "expected": 2
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Sentry",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 1",
+              "expected": "2"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 130
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Stalker",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "-",
+              "expected": "1"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 160
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Zealot",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 1",
+              "expected": "3"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 160
+            },
+            {
+              "field": "supply",
+              "actual": 1,
+              "expected": 2
+            }
+          ]
+        }
+      ]
+    },
+    "terran": {
+      "counts": {
+        "runtime": {
+          "factionCards": 2,
+          "units": 7,
+          "weapons": 15,
+          "abilities": 43,
+          "tacticalCards": 10,
+          "upgrades": 26
+        },
+        "expected": {
+          "factionCards": 2,
+          "units": 7,
+          "tacticalCards": 10
+        }
+      },
+      "issues": [
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Goliath",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "-",
+              "expected": "1"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 190
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 2
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Jim Raynor",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "-",
+              "expected": "1"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 230
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Marauder",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 1",
+              "expected": "2"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 150
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Marine",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 3",
+              "expected": "6"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 160
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Medic",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "1 - 1",
+              "expected": "3"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 110
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        },
+        {
+          "type": "unit-mustering-mismatch",
+          "name": "Raynor's Raider (Marine)",
+          "mismatches": [
+            {
+              "field": "models",
+              "actual": "-",
+              "expected": "6"
+            },
+            {
+              "field": "mineralCost",
+              "actual": null,
+              "expected": 230
+            },
+            {
+              "field": "supply",
+              "actual": 0,
+              "expected": 1
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "summary": {
+    "totalIssues": 22,
+    "factionsWithIssues": [
+      "zerg",
+      "protoss",
+      "terran"
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1118">
+  <title>StarCraft: TMG - Battle Companion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./runtime/payloads/unified-command.css">
+</head>
+<body style="--accent: var(--protoss); --accent-rgb: 240,185,75; --menu-rgb: 240,185,75;">
+  <div class="command-shell">
+    <header class="topbar">
+      <button class="menu-trigger" id="bottomMenuBtn" type="button" aria-label="Open navigation menu">☰</button>
+      <div class="topbar-copy">
+        <div class="eyebrow">Unified Command</div>
+        <div class="screen-title">Battle Companion</div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero-card">
+        <div class="hero-kicker">// Live Table Command</div>
+        <div class="hero-title">Opening the Companion front door.</div>
+        <div class="hero-copy">The table tracker now lives at the unified Companion entry point, beside the Army Builder, rules library, and faction guide.</div>
+      </section>
+
+      <section class="module-grid">
+        <a class="command-card" id="companionLaunch" href="../index.html">
+          <div class="card-kicker">Launch</div>
+          <div class="card-title">Battle Companion</div>
+          <div class="card-copy">Open the full Companion app.</div>
+        </a>
+        <a class="command-card" href="index.html">
+          <div class="card-kicker">Return</div>
+          <div class="card-title">Command Launcher</div>
+          <div class="card-copy">Go back to Army Builder command.</div>
+        </a>
+      </section>
+
+      <div class="empty-state" id="redirectStatus">Redirecting to Companion...</div>
+    </main>
+  </div>
+
+  <div class="app-menu-overlay" id="appMenuOverlay"></div>
+  <aside class="app-menu-panel" id="appMenuPanel" aria-hidden="true"></aside>
+
+  <script src="./runtime/payloads/reference-page-shell.js"></script>
+  <script>
+    const companionCandidates = location.protocol === 'file:'
+      ? ['../Companion/index.html', '../index.html']
+      : ['../index.html', '../Companion/index.html'];
+
+    async function companionEntry() {
+      for (const candidate of companionCandidates) {
+        try {
+          const response = await fetch(candidate, { cache: 'no-store' });
+          if (!response.ok) continue;
+          const text = await response.text();
+          if (/StarCraft:\s*TMG Companion|Battle Companion Online/i.test(text)) {
+            return candidate;
+          }
+        } catch (error) {
+          // File URLs may block fetch; fall back to the best local candidate below.
+        }
+      }
+      return companionCandidates[0];
+    }
+
+    const launch = document.getElementById('companionLaunch');
+    const status = document.getElementById('redirectStatus');
+    window.__referencePageShell?.initAppMenu({ activePage: 'battle' });
+    companionEntry().then(target => {
+      launch.href = target;
+      status.innerHTML = `Redirecting to <a href="${target}">Companion</a>...`;
+      window.setTimeout(() => {
+        window.location.href = target;
+      }, 650);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,3524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>StarCraft: TMG Companion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Army%20Builder/runtime/payloads/app-menu.css">
+  <script src="Army%20Builder/runtime/payloads/mission-setup.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1118;
+      --panel: #171d28;
+      --panel-2: #1d2531;
+      --panel-3: #263140;
+      --text: #f2efe8;
+      --muted: #a9b0bb;
+      --dim: #6b7a8d;
+      --border: #344256;
+      
+      /* Section identity colors */
+      --mission: #d97706;
+      --mission-rgb: 217,119,6;
+      --tactical: #8b5cf6;
+      --tactical-rgb: 139,92,246;
+      --phase: #22c55e;
+      --phase-rgb: 34,197,94;
+      --scoring: #3b82f6;
+      --scoring-rgb: 59,130,246;
+      
+      /* Faction colors */
+      --zerg: #9333ea;
+      --zerg-rgb: 147,51,234;
+      --protoss: #f0b94b;
+      --protoss-rgb: 240,185,75;
+      --menu-rgb: var(--protoss-rgb);
+      --terran: #3b82f6;
+      
+      /* Status */
+      --success: #22c55e;
+      --warning: #fbbf24;
+      --error: #ef4444;
+      --error-rgb: 239,68,68;
+      
+      --radius: 8px;
+      --radius-sm: 6px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.32);
+      --mono: 'IBM Plex Mono', monospace;
+      --sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --condensed: 'IBM Plex Sans Condensed', var(--sans);
+    }
+    html, body {
+      background: linear-gradient(180deg, #111722 0%, var(--bg) 20%, #0a0e15 100%);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+      line-height: 1.45;
+    }
+    body {
+      padding-bottom: calc(72px + env(safe-area-inset-bottom));
+    }
+    body::-webkit-scrollbar { display: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+    /* ═══════════════════════════════════════════
+       STICKY SCOREBAR — Faction glow identity
+       ═══════════════════════════════════════════ */
+    .scorebar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px 12px;
+      background:
+        radial-gradient(ellipse 50% 120% at 10% 0%, rgba(var(--zerg-rgb), 0.28), transparent 60%),
+        radial-gradient(ellipse 50% 120% at 90% 0%, rgba(var(--protoss-rgb), 0.28), transparent 60%),
+        linear-gradient(180deg, #1a1722 0%, #13111d 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 
+        0 4px 24px rgba(0,0,0,0.5),
+        inset 0 -1px 0 rgba(255,255,255,0.03);
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 10px;
+    }
+    .solo-mode .score-row {
+      grid-template-columns: 76px minmax(128px, 1fr) auto;
+      gap: 10px;
+    }
+    .solo-mode .score-side.right,
+    .solo-mode .vp-sep,
+    .solo-mode .vp-num.p2 {
+      display: none;
+    }
+    .solo-mode .score-side.left {
+      min-width: 0;
+      gap: 0;
+    }
+    .solo-mode .score-faction {
+      width: 100%;
+      min-height: 50px;
+      padding: 8px 9px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.09);
+      background: rgba(255,255,255,0.04);
+      justify-content: center;
+      text-align: center;
+      font-size: 0.76rem;
+      line-height: 1;
+    }
+    .solo-mode .score-center {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 13px;
+      min-width: 0;
+    }
+    .solo-mode .score-vp-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+    }
+    .solo-mode .score-vp {
+      justify-content: center;
+      width: 100%;
+    }
+    .solo-mode .vp-num.p1 {
+      font-size: 3.35rem;
+    }
+    .solo-mode .score-supply {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 2px;
+      min-width: 48px;
+      padding-bottom: 3px;
+      opacity: 0.92;
+    }
+    .solo-mode .score-supply strong {
+      font-size: 1.55rem;
+      line-height: 1;
+    }
+    .solo-mode .score-supply span {
+      display: block;
+      font-size: 0.46rem;
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-align: center;
+    }
+    .solo-mode .score-label {
+      max-width: 72px;
+      line-height: 1.05;
+      text-align: center;
+      white-space: normal;
+    }
+
+    .score-side {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .score-side.left { align-items: flex-start; }
+    .score-side.right { align-items: flex-end; text-align: right; }
+
+    .score-faction {
+      font-family: var(--condensed);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .score-faction .star {
+      font-size: 0.7rem;
+    }
+    .score-supply {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      font-weight: 600;
+      opacity: 0.7;
+    }
+    .score-supply strong {
+      font-weight: 800;
+      opacity: 1;
+    }
+
+    .score-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .score-vp {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .vp-num {
+      font-family: var(--mono);
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.1s, text-shadow 0.15s;
+      border-radius: var(--radius-sm);
+      padding: 0 4px;
+      min-width: 58px;
+      text-align: center;
+    }
+    .vp-num:active { transform: scale(0.94); }
+    .vp-num.p1 { 
+      color: var(--zerg); 
+      text-shadow: 0 0 20px rgba(var(--zerg-rgb), 0.5);
+    }
+    .vp-num.p2 { 
+      color: var(--protoss); 
+      text-shadow: 0 0 20px rgba(var(--protoss-rgb), 0.5);
+    }
+    .vp-sep {
+      font-size: 1.2rem;
+      color: var(--dim);
+      font-weight: 700;
+    }
+    .score-label {
+      font-family: var(--mono);
+      font-size: 0.46rem;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+    }
+
+    .phase-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .solo-mode .phase-row {
+      margin-top: 0;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .round-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      width: 56px;
+      min-height: 48px;
+      padding: 4px 7px 5px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-family: var(--mono);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      line-height: 1;
+    }
+    .round-chip:active { transform: scale(0.96); }
+    .round-chip .label {
+      color: var(--dim);
+      font-size: 0.48rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .round-chip .value {
+      color: var(--text);
+      font-size: 1.62rem;
+      font-weight: 800;
+      line-height: 0.95;
+    }
+
+    .phase-chip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-width: 92px;
+      min-height: 48px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(var(--phase-rgb), 0.2), rgba(var(--phase-rgb), 0.08));
+      border: 1px solid rgba(var(--phase-rgb), 0.4);
+      font-family: var(--condensed);
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--phase);
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(var(--phase-rgb), 0.15);
+      transition: transform 0.12s, border-color 0.15s, box-shadow 0.15s;
+    }
+    .phase-chip:active { transform: scale(0.96); }
+    .phase-chip-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1px;
+      line-height: 1;
+      min-width: 0;
+    }
+    .phase-label {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.46rem;
+      letter-spacing: 0.09em;
+    }
+    .phase-name {
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      text-shadow: 0 0 12px currentColor;
+    }
+    .phase-dot {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--phase);
+      box-shadow: 0 0 8px var(--phase);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .phase-pips {
+      display: flex;
+      gap: 3px;
+    }
+    .phase-pip {
+      width: 18px;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .phase-pip.active {
+      background: linear-gradient(180deg, var(--phase), rgba(var(--phase-rgb), 0.7));
+      border-color: var(--phase);
+      box-shadow: 0 0 8px rgba(var(--phase-rgb), 0.4);
+    }
+
+    [data-hold-type] {
+      position: relative;
+      overflow: hidden;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+    [data-hold-type].is-holding::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      border: 1px solid rgba(251, 191, 36, 0.78);
+      box-shadow: inset 0 0 18px rgba(251, 191, 36, 0.22), 0 0 14px rgba(251, 191, 36, 0.2);
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════
+       MAIN CONTENT
+       ═══════════════════════════════════════════ */
+    .main-content {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ═══════════════════════════════════════════
+       MISSION SECTION — Amber/Orange identity
+       ═══════════════════════════════════════════ */
+    .mission-section {
+      background: 
+        linear-gradient(135deg, rgba(var(--mission-rgb), 0.12), rgba(var(--mission-rgb), 0.03) 60%),
+        var(--panel);
+      border: 1px solid rgba(var(--mission-rgb), 0.25);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 
+        var(--shadow),
+        0 0 20px rgba(var(--mission-rgb), 0.08);
+    }
+    .mission-section::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--mission);
+    }
+    .mission-section { position: relative; }
+
+    .mission-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px 12px 18px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .mission-header:active {
+      background: rgba(var(--mission-rgb), 0.05);
+    }
+
+    .mission-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(var(--mission-rgb), 0.25), rgba(var(--mission-rgb), 0.1));
+      border: 1px solid rgba(var(--mission-rgb), 0.3);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .mission-info { flex: 1; min-width: 0; }
+    .mission-title {
+      font-family: var(--condensed);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--mission);
+    }
+    .mission-sub {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .section-chevron {
+      font-size: 1.2rem;
+      color: var(--mission);
+      opacity: 0.7;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .mission-section.open .section-chevron {
+      transform: rotate(90deg);
+    }
+
+    .mission-body {
+      display: none;
+      padding: 0 14px 14px 18px;
+      border-top: 1px solid rgba(var(--mission-rgb), 0.15);
+    }
+    .mission-section.open .mission-body {
+      display: block;
+    }
+
+    .marker-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .marker-chip {
+      padding: 10px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .marker-chip:active { transform: scale(0.96); }
+    .marker-chip.controlled-p1 {
+      border-color: rgba(var(--zerg-rgb), 0.5);
+      background: linear-gradient(180deg, rgba(var(--zerg-rgb), 0.18), rgba(var(--zerg-rgb), 0.06));
+      box-shadow: 0 0 12px rgba(var(--zerg-rgb), 0.12);
+    }
+    .marker-chip.controlled-p2 {
+      border-color: rgba(var(--protoss-rgb), 0.5);
+      background: linear-gradient(180deg, rgba(var(--protoss-rgb), 0.18), rgba(var(--protoss-rgb), 0.06));
+      box-shadow: 0 0 12px rgba(var(--protoss-rgb), 0.12);
+    }
+    .solo-mode .marker-chip.controlled-p2 {
+      border-color: rgba(var(--error-rgb), 0.42);
+      background: linear-gradient(180deg, rgba(var(--error-rgb), 0.16), rgba(var(--error-rgb), 0.04));
+      box-shadow: 0 0 12px rgba(var(--error-rgb), 0.1);
+    }
+    .marker-num {
+      font-family: var(--condensed);
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+    .marker-owner {
+      font-family: var(--mono);
+      font-size: 0.52rem;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 3px;
+    }
+    .marker-chip.controlled-p1 .marker-num { color: var(--zerg); }
+    .marker-chip.controlled-p1 .marker-owner { color: rgba(var(--zerg-rgb), 0.8); }
+    .marker-chip.controlled-p2 .marker-num { color: var(--protoss); }
+    .marker-chip.controlled-p2 .marker-owner { color: rgba(var(--protoss-rgb), 0.85); }
+    .solo-mode .marker-chip.controlled-p2 .marker-num,
+    .solo-mode .marker-chip.controlled-p2 .marker-owner { color: var(--error); }
+
+    /* ═══════════════════════════════════════════
+       SCORING SECTION — One-player table controls
+       ═══════════════════════════════════════════ */
+    .scoring-section {
+      background:
+        linear-gradient(135deg, rgba(var(--scoring-rgb), 0.11), rgba(var(--scoring-rgb), 0.03) 60%),
+        var(--panel);
+      border: 1px solid rgba(var(--scoring-rgb), 0.24);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow:
+        var(--shadow),
+        0 0 20px rgba(var(--scoring-rgb), 0.06);
+      position: relative;
+    }
+    .scoring-section::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--scoring);
+    }
+    .scoring-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px 12px 18px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .scoring-header:active {
+      background: rgba(var(--scoring-rgb), 0.05);
+    }
+    .scoring-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(var(--scoring-rgb), 0.25), rgba(var(--scoring-rgb), 0.1));
+      border: 1px solid rgba(var(--scoring-rgb), 0.32);
+      color: #c7dcff;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .scoring-info { flex: 1; min-width: 0; }
+    .scoring-title {
+      font-family: var(--condensed);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--scoring);
+    }
+    .scoring-sub {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .scoring-section .section-chevron {
+      color: var(--scoring);
+    }
+    .scoring-section.open .section-chevron {
+      transform: rotate(90deg);
+    }
+    .scoring-body {
+      display: none;
+      padding: 0 14px 14px 18px;
+      border-top: 1px solid rgba(var(--scoring-rgb), 0.14);
+    }
+    .scoring-section.open .scoring-body {
+      display: block;
+    }
+    .score-flow {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .score-now-card,
+    .score-step-card {
+      min-width: 0;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(var(--scoring-rgb), 0.2);
+      background: linear-gradient(180deg, rgba(var(--scoring-rgb), 0.08), rgba(255,255,255,0.02)), var(--panel-2);
+    }
+    .score-now-card {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      padding: 8px;
+    }
+    .score-step-title,
+    .score-source span {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.5rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+    .score-source {
+      min-width: 0;
+      padding: 7px 5px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.035);
+      text-align: center;
+    }
+    .score-source strong {
+      display: block;
+      margin-top: 3px;
+      color: var(--text);
+      font-family: var(--condensed);
+      font-size: 1rem;
+      line-height: 1;
+      font-weight: 900;
+    }
+    .score-primary-btn {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      min-height: 36px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(34,197,94,0.4);
+      background: linear-gradient(180deg, rgba(34,197,94,0.14), rgba(34,197,94,0.04)), var(--panel-2);
+      color: var(--text);
+      text-align: left;
+    }
+    .score-primary-btn.done {
+      border-color: rgba(var(--scoring-rgb), 0.35);
+      background: linear-gradient(180deg, rgba(var(--scoring-rgb), 0.13), rgba(var(--scoring-rgb), 0.04)), var(--panel-2);
+    }
+    .score-primary-label {
+      font-family: var(--condensed);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .score-primary-value {
+      color: #8be0aa;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .score-step-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .score-step-card {
+      padding: 7px;
+    }
+    .score-stepper {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr) 30px;
+      align-items: center;
+      gap: 5px;
+      margin-top: 5px;
+    }
+    .score-stepper button {
+      min-width: 0;
+      min-height: 28px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.045);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      font-weight: 900;
+    }
+    .score-stepper-value {
+      display: grid;
+      min-height: 28px;
+      place-items: center;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.15);
+      color: var(--text);
+      font-family: var(--condensed);
+      font-size: 1rem;
+      font-weight: 900;
+    }
+    @media (max-width: 380px) {
+      .score-now-card {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    .scoring-note {
+      margin-top: 0;
+      color: var(--muted);
+      font-size: 0.62rem;
+      line-height: 1.4;
+      text-align: center;
+    }
+    .scoring-marker-panel {
+      margin-top: 0;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(var(--scoring-rgb), 0.2);
+      background: rgba(255,255,255,0.028);
+    }
+    .scoring-marker-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+      color: var(--scoring);
+      font-family: var(--mono);
+      font-size: 0.54rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+    .scoring-marker-summary {
+      color: var(--muted);
+      font-size: 0.5rem;
+      text-align: right;
+    }
+    .scoring-marker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
+      gap: 6px;
+    }
+    .scoring-marker-card {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 4px;
+      padding: 5px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.012)), var(--panel-2);
+    }
+    .scoring-marker-card.controlled-p1 {
+      border-color: rgba(var(--zerg-rgb), 0.45);
+      background: linear-gradient(180deg, rgba(var(--zerg-rgb), 0.13), rgba(var(--zerg-rgb), 0.03)), var(--panel-2);
+    }
+    .scoring-marker-card.controlled-p2 {
+      border-color: rgba(var(--error-rgb), 0.45);
+      background: linear-gradient(180deg, rgba(var(--error-rgb), 0.12), rgba(var(--error-rgb), 0.03)), var(--panel-2);
+    }
+    .scoring-marker-card.inactive {
+      opacity: 0.62;
+    }
+    .scoring-marker-top {
+      display: contents;
+    }
+    .scoring-marker-main {
+      width: 100%;
+      min-width: 0;
+      min-height: 36px;
+      padding: 5px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.035);
+      text-align: left;
+    }
+    .scoring-marker-num {
+      display: block;
+      font-family: var(--condensed);
+      font-size: 0.82rem;
+      line-height: 1;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .scoring-marker-owner,
+    .scoring-marker-score {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.46rem;
+      font-weight: 800;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .scoring-marker-score {
+      color: var(--scoring);
+    }
+    .scoring-marker-active-btn {
+      min-width: 0;
+      min-height: 36px;
+      padding: 6px 2px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.035);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.46rem;
+      font-weight: 800;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+    .scoring-marker-active-btn {
+      width: 100%;
+      min-width: 28px;
+    }
+    .scoring-marker-active-btn.is-current {
+      color: var(--success);
+      background: rgba(34,197,94,0.08);
+    }
+    .scoring-marker-empty {
+      grid-column: 1 / -1;
+      min-height: 42px;
+      border-radius: var(--radius-sm);
+      border: 1px dashed rgba(var(--scoring-rgb), 0.28);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    @media (max-width: 380px) {
+      .scoring-marker-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    .scoring-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 0;
+    }
+    .scoring-action-btn {
+      min-height: 30px;
+      padding: 7px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.045);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.54rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════
+       TACTICAL SECTION — Purple identity
+       ═══════════════════════════════════════════ */
+    .tactical-section {
+      background: 
+        linear-gradient(135deg, rgba(var(--tactical-rgb), 0.1), rgba(var(--tactical-rgb), 0.02) 60%),
+        var(--panel);
+      border: 1px solid rgba(var(--tactical-rgb), 0.22);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 
+        var(--shadow),
+        0 0 20px rgba(var(--tactical-rgb), 0.06);
+      position: relative;
+    }
+    .tactical-section::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--tactical);
+    }
+
+    .tactical-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px 12px 18px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .tactical-header:active {
+      background: rgba(var(--tactical-rgb), 0.05);
+    }
+
+    .tactical-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(var(--tactical-rgb), 0.25), rgba(var(--tactical-rgb), 0.1));
+      border: 1px solid rgba(var(--tactical-rgb), 0.3);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .tactical-info { flex: 1; min-width: 0; }
+    .tactical-title {
+      font-family: var(--condensed);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--tactical);
+    }
+    .tactical-sub {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .tactical-section .section-chevron {
+      color: var(--tactical);
+    }
+    .tactical-section.open .section-chevron {
+      transform: rotate(90deg);
+    }
+
+    .tactical-body {
+      display: none;
+      padding: 0 14px 14px 18px;
+      border-top: 1px solid rgba(var(--tactical-rgb), 0.12);
+    }
+    .tactical-section.open .tactical-body {
+      display: block;
+    }
+
+    .tac-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .tac-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--tactical);
+    }
+    .tac-card.exhausted {
+      opacity: 0.5;
+      border-left-color: var(--dim);
+    }
+    .tac-name {
+      flex: 1;
+      font-family: var(--condensed);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .tac-value {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--tactical);
+      font-weight: 700;
+    }
+    .tac-state {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: rgba(var(--tactical-rgb), 0.15);
+      border: 1px solid rgba(var(--tactical-rgb), 0.3);
+      color: var(--tactical);
+      cursor: pointer;
+    }
+    .tac-state:active { transform: scale(0.95); }
+
+    /* ═══════════════════════════════════════════
+       ARMY TABS — Faction colors
+       ═══════════════════════════════════════════ */
+    .army-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .solo-mode .army-tabs {
+      display: none;
+    }
+    .army-tab {
+      padding: 12px 14px;
+      font-family: var(--condensed);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      text-align: center;
+      transition: all 0.15s;
+      border: 1px solid var(--border);
+    }
+    .army-tab:first-child {
+      border-radius: var(--radius) 0 0 var(--radius);
+      border-right: none;
+    }
+    .army-tab:last-child {
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .army-tab:active { transform: scale(0.98); }
+
+    .army-tab.p1 {
+      background: var(--panel);
+      color: var(--dim);
+    }
+    .army-tab.p1.active {
+      background: linear-gradient(180deg, rgba(var(--zerg-rgb), 0.25), rgba(var(--zerg-rgb), 0.1));
+      border-color: rgba(var(--zerg-rgb), 0.5);
+      color: var(--zerg);
+      box-shadow: inset 0 0 20px rgba(var(--zerg-rgb), 0.1);
+    }
+    .army-tab.p2 {
+      background: var(--panel);
+      color: var(--dim);
+    }
+    .army-tab.p2.active {
+      background: linear-gradient(180deg, rgba(var(--protoss-rgb), 0.25), rgba(var(--protoss-rgb), 0.1));
+      border-color: rgba(var(--protoss-rgb), 0.5);
+      color: var(--protoss);
+      box-shadow: inset 0 0 20px rgba(var(--protoss-rgb), 0.1);
+    }
+    .army-tab .count {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      opacity: 0.7;
+    }
+
+    /* ═══════════════════════════════════════════
+       UNIT CARDS — Faction colored accent bar
+       ═══════════════════════════════════════════ */
+    .unit-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .unit-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    .unit-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--unit-color, var(--zerg));
+    }
+    .unit-card.dead {
+      opacity: 0.6;
+    }
+    .unit-card.dead::before {
+      background: var(--dim);
+    }
+
+    .unit-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 12px 12px 16px;
+      cursor: pointer;
+    }
+    .unit-header:active {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .unit-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .unit-status-dot.board {
+      background: var(--success);
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+    }
+    .unit-status-dot.reserves {
+      background: var(--warning);
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+    }
+    .unit-status-dot.destroyed {
+      background: var(--error);
+      opacity: 0.6;
+    }
+
+    .unit-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .unit-name {
+      font-family: var(--condensed);
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .unit-card.dead .unit-name {
+      color: var(--dim);
+      text-decoration: line-through;
+      text-decoration-color: rgba(107, 122, 141, 0.5);
+    }
+    .unit-meta {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--dim);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .unit-location-pill {
+      padding: 4px 7px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--panel-2);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      font-weight: 800;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .unit-location-pill.board {
+      border-color: rgba(34,197,94,0.44);
+      background: rgba(34,197,94,0.12);
+      color: var(--success);
+    }
+    .unit-location-pill.reserves {
+      border-color: rgba(251,191,36,0.44);
+      background: rgba(251,191,36,0.12);
+      color: var(--warning);
+    }
+    .unit-location-pill.destroyed {
+      border-color: rgba(var(--error-rgb),0.44);
+      background: rgba(var(--error-rgb),0.12);
+      color: var(--error);
+    }
+
+    .unit-controls {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .unit-badge {
+      padding: 4px 7px;
+      border-radius: 5px;
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border: 1px solid transparent;
+      background: var(--panel-2);
+      color: var(--dim);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .unit-badge:active { transform: scale(0.94); }
+    .unit-badge.on.engaged {
+      border-color: rgba(224, 120, 69, 0.6);
+      background: rgba(224, 120, 69, 0.15);
+      color: #e07845;
+      box-shadow: 0 0 8px rgba(224, 120, 69, 0.2);
+    }
+    .unit-badge.on.activated {
+      border-color: rgba(107, 140, 206, 0.6);
+      background: rgba(107, 140, 206, 0.15);
+      color: #6b8cce;
+      box-shadow: 0 0 8px rgba(107, 140, 206, 0.2);
+    }
+
+    .model-counter {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 5px 8px;
+      border-radius: 6px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .model-counter:active { transform: scale(0.94); }
+    .model-counter .current { color: var(--text); }
+    .model-counter .sep { color: var(--dim); opacity: 0.5; }
+    .model-counter .max { color: var(--dim); }
+    .model-counter.full {
+      border-color: rgba(34, 197, 94, 0.4);
+      background: rgba(34, 197, 94, 0.08);
+    }
+    .model-counter.full .current { color: var(--success); }
+
+    .unit-chevron {
+      font-size: 1.1rem;
+      color: var(--dim);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .unit-card.open .unit-chevron {
+      transform: rotate(90deg);
+    }
+
+    .unit-body {
+      display: none;
+      padding: 0 12px 14px 16px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .unit-card.open .unit-body {
+      display: block;
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin: 10px 0;
+    }
+    .stat-chip {
+      padding: 5px 8px;
+      border-radius: 5px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat-chip .label { color: var(--dim); text-transform: uppercase; }
+    .stat-chip .value { color: var(--text); font-weight: 700; }
+
+    .weapon-block {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+    }
+    .weapon-name {
+      font-family: var(--condensed);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: var(--unit-color, var(--zerg));
+    }
+    .weapon-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .weapon-stat {
+      padding: 3px 6px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.04);
+      font-family: var(--mono);
+      font-size: 0.52rem;
+    }
+    .weapon-stat .k { color: var(--dim); }
+    .weapon-stat .v { color: var(--muted); font-weight: 600; }
+
+    .location-btns {
+      display: flex;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .loc-btn {
+      flex: 1;
+      padding: 9px;
+      border-radius: 6px;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      font-family: var(--condensed);
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--dim);
+      transition: all 0.12s;
+    }
+    .loc-btn:active { transform: scale(0.97); }
+    .loc-btn.active {
+      border-color: var(--loc-color);
+      background: rgba(var(--loc-rgb), 0.15);
+      color: var(--loc-color);
+      box-shadow: 0 0 10px rgba(var(--loc-rgb), 0.15);
+    }
+
+    .prototype-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.09);
+      background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.018));
+    }
+    .prototype-toolbar-text {
+      min-width: 0;
+    }
+    .prototype-toolbar-title {
+      font-family: var(--condensed);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 0.85rem;
+    }
+    .prototype-toolbar-sub {
+      color: var(--muted);
+      font-size: 0.68rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .prototype-pill-btn {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(217,119,6,0.4);
+      color: var(--mission);
+      background: rgba(217,119,6,0.1);
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .companion-actions {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 6px;
+      margin: -4px 0 4px;
+    }
+    .companion-action-btn {
+      min-width: 0;
+      min-height: 38px;
+      padding: 8px 5px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)), var(--panel-2);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .companion-action-btn.primary {
+      border-color: rgba(var(--mission-rgb), 0.42);
+      color: var(--mission);
+      background: linear-gradient(180deg, rgba(var(--mission-rgb), 0.14), rgba(var(--mission-rgb), 0.04)), var(--panel-2);
+    }
+    .companion-tab-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: calc(58px + env(safe-area-inset-bottom));
+      padding-bottom: env(safe-area-inset-bottom);
+      background:
+        linear-gradient(180deg, rgba(var(--protoss-rgb), 0.08), transparent 62%),
+        var(--panel);
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -12px 26px rgba(0,0,0,0.34);
+      display: flex;
+      z-index: 220;
+    }
+    .companion-tab-bar .tab-btn,
+    .companion-tab-bar .app-menu-btn {
+      position: static;
+      right: auto;
+      bottom: auto;
+      z-index: auto;
+      flex: 1 1 0;
+      min-width: 0;
+      width: auto;
+      height: auto;
+      padding: 6px 2px 5px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      font-family: var(--condensed);
+      font-size: 0.62rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .companion-tab-bar .tab-btn .icon {
+      min-height: 20px;
+      display: grid;
+      place-items: center;
+      font-family: var(--sans);
+      font-size: 1.08rem;
+      line-height: 1;
+    }
+    .companion-tab-bar .tab-btn.primary {
+      color: var(--mission);
+      background: rgba(var(--mission-rgb), 0.1);
+    }
+    .companion-tab-bar .tab-btn.danger {
+      color: var(--error);
+      background: rgba(var(--error-rgb), 0.08);
+    }
+    .companion-tab-bar .tab-btn:active,
+    .companion-tab-bar .app-menu-btn:active {
+      color: var(--protoss);
+      background: rgba(var(--protoss-rgb), 0.1);
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 250;
+      background: rgba(2, 6, 12, 0.74);
+      backdrop-filter: blur(10px);
+    }
+    .modal-panel {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 260;
+      max-height: 82vh;
+      overflow: auto;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, #192132, #101722);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+    }
+    @media (max-height: 620px) {
+      .modal-panel {
+        top: calc(12px + env(safe-area-inset-top));
+        bottom: calc(12px + env(safe-area-inset-bottom));
+        transform: none;
+        max-height: none;
+      }
+    }
+    .modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .modal-title {
+      font-family: var(--condensed);
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .modal-sub {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      font-size: 1.1rem;
+    }
+    .modal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .modal-card-btn,
+    .modal-select {
+      min-width: 0;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.045);
+      color: var(--text);
+      font-weight: 800;
+      font-size: 0.72rem;
+      text-align: left;
+    }
+    .modal-card-btn.ready {
+      border-color: rgba(34,197,94,0.42);
+      background: rgba(34,197,94,0.1);
+      color: #8be0aa;
+    }
+    .modal-card-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .modal-card-btn small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      font-weight: 600;
+    }
+    .modal-select {
+      width: 100%;
+      appearance: none;
+    }
+    .modal-stack {
+      display: grid;
+      gap: 8px;
+    }
+    .mission-info-card {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(var(--mission-rgb), 0.22);
+      background: linear-gradient(180deg, rgba(var(--mission-rgb), 0.09), rgba(255,255,255,0.025));
+    }
+    .mission-info-card.map {
+      border-color: rgba(var(--terran-rgb), 0.24);
+      background: linear-gradient(180deg, rgba(var(--terran-rgb), 0.08), rgba(255,255,255,0.025));
+    }
+    .mission-info-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .mission-info-title {
+      font-family: var(--condensed);
+      font-size: 0.92rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--mission);
+    }
+    .mission-info-card.map .mission-info-title {
+      color: var(--terran);
+    }
+    .mission-info-meta {
+      margin-top: 2px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      font-weight: 700;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+    .mission-info-section {
+      display: grid;
+      gap: 6px;
+    }
+    .mission-info-label {
+      color: var(--dim);
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .mission-info-list {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .mission-info-list li,
+    .mission-info-copy,
+    .mission-info-row {
+      color: var(--text);
+      font-size: 0.72rem;
+      line-height: 1.4;
+    }
+    .mission-info-list li {
+      padding: 7px 8px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .mission-info-copy {
+      color: var(--muted);
+    }
+    .mission-info-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 8px;
+      align-items: baseline;
+      padding: 7px 8px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .mission-info-row strong {
+      color: var(--mission);
+      font-family: var(--mono);
+      font-size: 0.64rem;
+      font-weight: 900;
+    }
+    .mission-info-row span {
+      min-width: 0;
+      color: var(--muted);
+    }
+    .mission-info-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    @media (max-width: 380px) {
+      .mission-info-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+    .marker-editor {
+      display: grid;
+      gap: 10px;
+    }
+    .marker-control-board {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr 1fr;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .marker-control-side,
+    .marker-control-center,
+    .marker-home-btn {
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.045);
+      padding: 10px 8px;
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .marker-control-side small,
+    .marker-control-center small {
+      display: block;
+      margin-top: 4px;
+      font-size: 0.52rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: none;
+    }
+    .marker-home-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .status-line {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      line-height: 1.4;
+    }
+    .ledger-list {
+      max-height: 58vh;
+      overflow: auto;
+      display: grid;
+      gap: 8px;
+    }
+    .ledger-entry {
+      padding: 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.035);
+    }
+    .ledger-head,
+    .ledger-source {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .ledger-head {
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .ledger-title {
+      color: var(--scoring);
+      font-family: var(--condensed);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .ledger-total,
+    .ledger-source span:last-child {
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .ledger-source {
+      padding: 3px 0;
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+    .ledger-note {
+      margin-top: 6px;
+      color: var(--dim);
+      font-size: 0.68rem;
+      line-height: 1.35;
+    }
+
+    /* Unified command intro and app menu */
+    .companion-intro {
+      position: fixed;
+      inset: 0;
+      z-index: 100000;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(var(--zerg-rgb), 0.18), transparent 30%),
+        radial-gradient(circle at 82% 18%, rgba(var(--protoss-rgb), 0.16), transparent 32%),
+        linear-gradient(180deg, #080b10 0%, #0d1118 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      transition: opacity 0.55s ease, visibility 0.55s ease;
+    }
+    .companion-intro.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .intro-card {
+      width: min(100%, 420px);
+      text-align: center;
+    }
+    .intro-logo {
+      width: min(84vw, 360px);
+      height: auto;
+      margin: 0 auto 16px;
+      display: block;
+      filter: drop-shadow(0 0 22px rgba(var(--protoss-rgb), 0.16)) drop-shadow(0 8px 28px rgba(0,0,0,.5));
+    }
+    .intro-kicker {
+      color: var(--protoss);
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .intro-title {
+      font-family: var(--condensed);
+      font-size: clamp(1.7rem, 8vw, 2.7rem);
+      font-weight: 800;
+      line-height: 0.95;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .intro-sub {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.55;
+      max-width: 34ch;
+      margin: 0 auto 18px;
+    }
+    .intro-loader {
+      height: 3px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .intro-loader span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--zerg), var(--terran), var(--protoss));
+      animation: intro-load 2.4s ease forwards;
+    }
+    .intro-skip {
+      position: fixed;
+      top: calc(env(safe-area-inset-top,0px) + 12px);
+      right: 12px;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-weight: 800;
+      z-index: 100001;
+    }
+    @keyframes intro-load {
+      to { width: 100%; }
+    }
+  </style>
+</head>
+<body class="solo-mode">
+
+  <div class="companion-intro hidden" id="companionIntro">
+    <button class="intro-skip" type="button" id="skipIntro" aria-label="Skip intro">X</button>
+    <div class="intro-card">
+      <img class="intro-logo" src="Army%20Builder/SCTMG2.png" alt="StarCraft: The Miniatures Game">
+      <div class="intro-kicker">Koprulu Sector Terminal</div>
+      <div class="intro-title">Battle Companion Online</div>
+      <div class="intro-sub">Load the table tracker, import your army, and keep every rule archive one command away.</div>
+      <div class="intro-loader"><span></span></div>
+    </div>
+  </div>
+
+  <div class="app-menu-overlay" id="appMenuOverlay"></div>
+  <aside class="app-menu-panel" id="appMenuPanel" aria-hidden="true"></aside>
+
+  <nav class="tab-bar companion-tab-bar" aria-label="Bottom navigation">
+    <button class="tab-btn app-menu-btn" type="button" id="bottomMenuBtn" aria-label="Open command menu" aria-expanded="false"><span class="icon">☰</span><span>Menu</span></button>
+    <button class="tab-btn primary" type="button" onclick="openMissionModal()"><span class="icon">🗺</span><span>Mission</span></button>
+    <button class="tab-btn" type="button" onclick="openBuilderModal()"><span class="icon">⚔</span><span>Army</span></button>
+    <button class="tab-btn" type="button" onclick="openLogModal()"><span class="icon">≡</span><span>Log</span></button>
+    <button class="tab-btn" type="button" onclick="openReadMeModal()"><span class="icon">?</span><span>Help</span></button>
+    <button class="tab-btn danger" type="button" onclick="resetCompanionState()"><span class="icon">C</span><span>Clear</span></button>
+  </nav>
+
+  <!-- SCOREBAR -->
+  <div class="scorebar">
+    <div class="score-row">
+      <div class="score-side left">
+        <div class="score-faction" style="color: var(--zerg);">
+          <span class="star">★</span> Zerg
+        </div>
+      </div>
+
+      <div class="phase-row">
+        <button class="round-chip" type="button" data-hold-type="round-down" data-tap-type="round-up" aria-label="Round counter. Tap to advance round. Hold to decrease round.">
+          <span class="label">Round</span>
+          <span class="value">4</span>
+        </button>
+        <button class="phase-chip" type="button" aria-label="Current phase. Tap to advance phase.">
+          <span class="phase-dot"></span>
+          <span class="phase-chip-text">
+            <span class="phase-label">Phase</span>
+            <span class="phase-name">Move</span>
+          </span>
+        </button>
+      </div>
+
+      <div class="score-center">
+        <div class="score-supply" style="color: var(--zerg);"><strong>5</strong><span>Available<br>Supply</span></div>
+        <div class="score-vp-stack">
+          <div class="score-vp">
+            <button class="vp-num p1" type="button" data-hold-type="vp-down" data-tap-type="vp-up" data-score-player="p1" aria-label="My victory points. Tap to add one. Hold to subtract one.">7</button>
+            <span class="vp-sep">–</span>
+            <button class="vp-num p2" type="button" data-hold-type="vp-down" data-tap-type="vp-up" data-score-player="p2" aria-label="Opponent victory points. Tap to add one. Hold to subtract one.">2</button>
+          </div>
+          <div class="score-label">Victory<br>Points</div>
+        </div>
+      </div>
+
+      <div class="score-side right">
+        <div class="score-faction" style="color: var(--protoss);">
+          Protoss
+        </div>
+        <div class="score-supply" style="color: var(--protoss);"><strong>6</strong> supply</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <div class="prototype-toolbar">
+      <div class="prototype-toolbar-text">
+        <div class="prototype-toolbar-title">Army Builder</div>
+        <div class="prototype-toolbar-sub">Import saved rosters into this companion</div>
+      </div>
+      <button class="prototype-pill-btn" onclick="openBuilderModal()">Open</button>
+    </div>
+
+    <!-- Mission Section (Amber) -->
+    <div class="mission-section" id="missionSection">
+      <div class="mission-header" onclick="toggle('missionSection')">
+        <div class="mission-icon">🗺</div>
+        <div class="mission-info">
+          <div class="mission-title">Gather the Resources · Agria Valley</div>
+          <div class="mission-sub">Skirmish · Supply cap 6 · 3/3 markers</div>
+        </div>
+        <button class="prototype-pill-btn" type="button" onclick="event.stopPropagation();openMissionModal()">Setup</button>
+        <span class="section-chevron">›</span>
+      </div>
+      <div class="mission-body">
+        <div class="marker-grid">
+          <div class="marker-chip controlled-p1">
+            <div class="marker-num">M1</div>
+            <div class="marker-owner">P1 · Supply 1</div>
+          </div>
+          <div class="marker-chip">
+            <div class="marker-num">M5</div>
+            <div class="marker-owner">Neutral</div>
+          </div>
+          <div class="marker-chip controlled-p2">
+            <div class="marker-num">M2</div>
+            <div class="marker-owner">P2 · Supply 2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scoring Section -->
+    <div class="scoring-section" id="scoringSection">
+      <div class="scoring-header" onclick="toggle('scoringSection')">
+        <div class="scoring-icon">VP</div>
+        <div class="scoring-info">
+          <div class="scoring-title">Scoring</div>
+          <div class="scoring-sub">Round 1 · Manual 0 · Mission +0</div>
+        </div>
+        <span class="section-chevron">›</span>
+      </div>
+      <div class="scoring-body">
+        <div class="score-flow">
+          <div class="score-now-card">
+            <div class="score-source"><span>Total</span><strong class="scoring-total">0</strong></div>
+            <div class="score-source"><span>Bonus</span><strong class="scoring-manual">0</strong></div>
+            <div class="score-source"><span>Destroyed</span><strong class="scoring-destroyed">0</strong></div>
+            <button class="score-primary-btn" type="button" onclick="applyMissionMarkerScore()">
+              <span class="score-primary-label">Score Round</span>
+              <span class="score-primary-value scoring-ready">+0 VP</span>
+            </button>
+          </div>
+          <div class="score-step-grid">
+            <div class="score-step-card">
+              <div class="score-step-title">Bonus VP</div>
+              <div class="score-stepper">
+                <button type="button" onclick="changeVp('p1', -1)">-</button>
+                <span class="score-stepper-value scoring-manual">0</span>
+                <button type="button" onclick="changeVp('p1', 1)">+</button>
+              </div>
+            </div>
+            <div class="score-step-card">
+              <div class="score-step-title">Destroyed</div>
+              <div class="score-stepper">
+                <button type="button" onclick="adjustDestroyedSupply('p1', -1)">-</button>
+                <span class="score-stepper-value scoring-destroyed">0</span>
+                <button type="button" onclick="adjustDestroyedSupply('p1', 1)">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="scoring-marker-panel">
+            <div class="scoring-marker-head">
+              <span>Marker Control</span>
+              <span class="scoring-marker-summary">Pick mission/map</span>
+            </div>
+            <div class="scoring-marker-grid"></div>
+          </div>
+          <div class="scoring-note">Tap marker chips to switch owner. Tap On/Off for activation.</div>
+          <div class="scoring-actions">
+            <button class="scoring-action-btn" type="button" onclick="openScoringLedger()">Ledger</button>
+            <button class="scoring-action-btn" type="button" onclick="resetCompanionState()">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tactical Section (Purple) -->
+    <div class="tactical-section" id="tacticalSection">
+      <div class="tactical-header" onclick="toggle('tacticalSection')">
+        <div class="tactical-icon">⚡</div>
+        <div class="tactical-info">
+          <div class="tactical-title">Tactical Cards</div>
+          <div class="tactical-sub">3/3 ready · 2/2 BM available</div>
+        </div>
+        <span class="section-chevron">›</span>
+      </div>
+      <div class="tactical-body">
+        <div class="tac-grid">
+          <div class="tac-card">
+            <span class="tac-name">No tactical cards imported</span>
+            <span class="tac-value">Open builder</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Army Tabs -->
+    <div class="army-tabs">
+      <button class="army-tab p1 active" onclick="setArmy('p1', this)">
+        My Army <span class="count">(0)</span>
+      </button>
+    </div>
+
+    <!-- Unit List -->
+    <div class="unit-list">
+      <div class="unit-card">
+        <div class="unit-header">
+          <div class="unit-info">
+            <div class="unit-name">No units loaded</div>
+            <div class="unit-meta"><span>Import your roster from Army Builder</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="prototypeModalRoot"></div>
+
+  <script src="Army%20Builder/runtime/payloads/reference-page-shell.js"></script>
+  <script>
+    const SAVE_KEY = "sc-tmg-companion-game-v1";
+    const INTRO_KEY = "sc-tmg-companion-intro-seen-v1";
+    const COMPANION_PENDING_IMPORT_KEY = "sc-tmg-companion-pending-import";
+    const SOLO_PLAYER = "p1";
+    const BUILDER_FACTIONS = {
+      zerg: { label: "Zerg", key: "sc-tmg-zerg-v4", href: "Army%20Builder/zerg.html", payload: "Army%20Builder/runtime/payloads/zerg.js", color: "#9333ea" },
+      terran: { label: "Terran", key: "sc-tmg-terran-v1", href: "Army%20Builder/terran.html", payload: "Army%20Builder/runtime/payloads/terran.js", color: "#3b82f6" },
+      protoss: { label: "Protoss", key: "sc-tmg-protoss-v1", href: "Army%20Builder/protoss.html", payload: "Army%20Builder/runtime/payloads/protoss.js", color: "#d4af37" }
+    };
+    const MISSION_SETUP = window.__missionSetupData || { missions: [], maps: [] };
+    const SCALES = [{ id: "skirmish", name: "Skirmish" }, { id: "standard", name: "Standard" }, { id: "grand", name: "Grand" }];
+    const MISSIONS = (MISSION_SETUP.missions || []).map(m => ({ ...m, params: m.parameters || m.params || [] }));
+    const MAPS = MISSION_SETUP.maps || [];
+
+    function initCompanionIntro() {
+      const intro = document.getElementById("companionIntro");
+      const skip = document.getElementById("skipIntro");
+      if (!intro) return;
+
+      function closeIntro() {
+        intro.classList.add("hidden");
+        try { sessionStorage.setItem(INTRO_KEY, "1"); } catch (err) {}
+      }
+
+      let introSeen = true;
+      try { introSeen = !!sessionStorage.getItem(INTRO_KEY); } catch (err) {}
+      if (introSeen) {
+        intro.classList.add("hidden");
+        return;
+      }
+
+      skip?.addEventListener("click", closeIntro);
+      setTimeout(closeIntro, 2900);
+    }
+
+    function initCommandMenu() {
+      window.__referencePageShell?.initAppMenu({ activePage: "battle" });
+    }
+
+    initCompanionIntro();
+    initCommandMenu();
+    const LOC = {
+      reserves: { label: "Reserves", cls: "reserves" },
+      battlefield: { label: "Board", cls: "board" },
+      destroyed: { label: "Destroyed", cls: "destroyed" }
+    };
+    const FALLBACK = {
+      state: {
+        round: 1,
+        phase: 0,
+        vp: { p1: 0, p2: 0 },
+        firstPlayer: "p1",
+        mission: { scaleId: "standard", missionId: "", mapId: "", markers: {} },
+        roundScoring: {},
+        scoredMarkersByRound: {},
+        scoringLedger: [],
+        log: []
+      },
+      armies: {
+        p1: {
+          label: "My Army",
+          color: "#9333ea",
+          units: [],
+          tactical: []
+        },
+        p2: { label: "Opponent", color: "#f0b94b", units: [], tactical: [] }
+      }
+    };
+    function defaultRoundScore() {
+      return {
+        destroyedBy: { p1: 0, p2: 0 },
+        manualVp: { p1: 0, p2: 0 },
+        missionVp: { p1: 0, p2: 0 },
+        vp: { p1: 0, p2: 0 },
+        events: []
+      };
+    }
+    function normalizeScoreState(state) {
+      state.vp = { p1: Number(state.vp?.p1 || 0), p2: Number(state.vp?.p2 || 0) };
+      state.roundScoring = state.roundScoring && typeof state.roundScoring === "object" ? state.roundScoring : {};
+      const hasRoundScore = Object.values(state.roundScoring).some(score => score && (score.manualVp || score.missionVp || score.vp));
+      if (!hasRoundScore && (state.vp.p1 || state.vp.p2)) {
+        const key = String(state.round || 1);
+        state.roundScoring[key] = {
+          ...defaultRoundScore(),
+          manualVp: { p1: state.vp.p1, p2: state.vp.p2 },
+          vp: { p1: state.vp.p1, p2: state.vp.p2 }
+        };
+      }
+      state.scoredMarkersByRound = state.scoredMarkersByRound && typeof state.scoredMarkersByRound === "object" ? state.scoredMarkersByRound : {};
+      state.scoringLedger = Array.isArray(state.scoringLedger) ? state.scoringLedger : [];
+      state.log = Array.isArray(state.log) ? state.log : [];
+      return state;
+    }
+    const app = loadPrototypeState();
+    let viewingArmy = SOLO_PLAYER;
+
+    function toggle(id) {
+      document.getElementById(id)?.classList.toggle("open");
+    }
+    function toggleUnit(id) {
+      document.getElementById(id)?.classList.toggle("open");
+    }
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    }
+    function js(value) {
+      return JSON.stringify(String(value ?? ""));
+    }
+    function markerArg(value) {
+      return String(Math.max(0, Number(value) || 0));
+    }
+    function buzz(ms = 12) {
+      try { navigator.vibrate?.(ms); } catch (err) {}
+    }
+    function addLog(text) {
+      app.state.log = Array.isArray(app.state.log) ? app.state.log : [];
+      app.state.log.unshift({
+        id: Date.now() + Math.random(),
+        round: app.state.round || 1,
+        phase: phaseName(),
+        text,
+        ts: new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })
+      });
+      if (app.state.log.length > 300) app.state.log.length = 300;
+    }
+    const HOLD_REPEAT_START_MS = 650;
+    const HOLD_REPEAT_MS = 650;
+    let activeHoldRepeat = null;
+    let suppressHoldClickUntil = 0;
+
+    function initHoldRepeats() {
+      if (window.__companionHoldRepeatsReady) return;
+      window.__companionHoldRepeatsReady = true;
+      document.addEventListener("pointerdown", beginHoldRepeat, true);
+      document.addEventListener("pointermove", moveHoldRepeat, true);
+      document.addEventListener("pointerup", endHoldRepeat, true);
+      document.addEventListener("pointercancel", endHoldRepeat, true);
+      document.addEventListener("contextmenu", handleHoldContextMenu, true);
+      document.addEventListener("click", handleHoldClick, true);
+    }
+
+    function holdTarget(event) {
+      return event.target instanceof Element ? event.target.closest("[data-hold-type]") : null;
+    }
+
+    function beginHoldRepeat(event) {
+      const el = holdTarget(event);
+      if (!el || el.disabled || (event.button && event.button !== 0)) return;
+      event.preventDefault();
+      clearHoldRepeat();
+      activeHoldRepeat = {
+        el,
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        fired: false,
+        startTimer: window.setTimeout(startHoldRepeat, HOLD_REPEAT_START_MS),
+        repeatTimer: 0
+      };
+      try { el.setPointerCapture?.(event.pointerId); } catch (err) {}
+    }
+
+    function startHoldRepeat() {
+      if (!activeHoldRepeat) return;
+      activeHoldRepeat.el.classList.add("is-holding");
+      repeatHoldAction();
+    }
+
+    function repeatHoldAction() {
+      if (!activeHoldRepeat) return;
+      const changed = runHoldAction(activeHoldRepeat.el);
+      activeHoldRepeat.fired = true;
+      if (!changed) {
+        suppressHoldClickUntil = performance.now() + 700;
+        clearHoldRepeat(activeHoldRepeat);
+        return;
+      }
+      activeHoldRepeat.repeatTimer = window.setTimeout(repeatHoldAction, HOLD_REPEAT_MS);
+    }
+
+    function moveHoldRepeat(event) {
+      if (!activeHoldRepeat || event.pointerId !== activeHoldRepeat.pointerId) return;
+      event.preventDefault();
+      const dx = event.clientX - activeHoldRepeat.startX;
+      const dy = event.clientY - activeHoldRepeat.startY;
+      if (Math.hypot(dx, dy) > 16) {
+        suppressHoldClickUntil = performance.now() + 700;
+        clearHoldRepeat();
+      }
+    }
+
+    function endHoldRepeat(event) {
+      if (!activeHoldRepeat || event.pointerId !== activeHoldRepeat.pointerId) return;
+      event.preventDefault();
+      const hold = activeHoldRepeat;
+      clearHoldRepeat(hold);
+      if (hold.fired) {
+        suppressHoldClickUntil = performance.now() + 700;
+        refreshAfterHold(hold.el);
+        return;
+      }
+      suppressHoldClickUntil = performance.now() + 700;
+      runTapAction(hold.el);
+    }
+
+    function clearHoldRepeat(hold = activeHoldRepeat) {
+      if (!hold) return;
+      window.clearTimeout(hold.startTimer);
+      window.clearTimeout(hold.repeatTimer);
+      hold.el.classList.remove("is-holding");
+      try { hold.el.releasePointerCapture?.(hold.pointerId); } catch (err) {}
+      if (activeHoldRepeat === hold) activeHoldRepeat = null;
+    }
+
+    function handleHoldContextMenu(event) {
+      const el = holdTarget(event);
+      if (!el) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (activeHoldRepeat || performance.now() < suppressHoldClickUntil) return;
+      suppressHoldClickUntil = performance.now() + 700;
+      if (runHoldAction(el)) refreshAfterHold(el);
+    }
+
+    function handleHoldClick(event) {
+      const el = holdTarget(event);
+      if (performance.now() < suppressHoldClickUntil || el) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        return;
+      }
+    }
+
+    function runHoldAction(el) {
+      const type = el.dataset.holdType;
+      if (type === "round-down") {
+        return changeRound(-1);
+      }
+      if (type === "marker-supply-down") {
+        return updateMarkerSupplyHeld(el, -1);
+      }
+      if (type === "vp-down") {
+        return changeVp(el.dataset.scorePlayer || SOLO_PLAYER, -1);
+      }
+      if (type === "destroyed-down") {
+        return adjustDestroyedSupply(el.dataset.scorePlayer || SOLO_PLAYER, -1);
+      }
+      return false;
+    }
+
+    function runTapAction(el) {
+      const type = el.dataset.tapType;
+      if (type === "round-up") {
+        return changeRound(1);
+      }
+      if (type === "marker-supply-up") {
+        return updateMarkerSupply(el.dataset.markerNum, el.dataset.markerPlayer || "p1", 1);
+      }
+      if (type === "vp-up") {
+        return changeVp(el.dataset.scorePlayer || SOLO_PLAYER, 1);
+      }
+      if (type === "destroyed-up") {
+        return adjustDestroyedSupply(el.dataset.scorePlayer || SOLO_PLAYER, 1);
+      }
+      return false;
+    }
+
+    function refreshAfterHold(el) {
+      if (el.dataset.holdType === "marker-supply-down") openMarkerModal(el.dataset.markerNum);
+    }
+    function savedBuilder(faction) {
+      try { return JSON.parse(localStorage.getItem(BUILDER_FACTIONS[faction]?.key) || "null"); } catch (err) { return null; }
+    }
+    function builderRosterCount(faction) {
+      return (savedBuilder(faction)?.units || []).length;
+    }
+    function scaleKey(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+    function activeMissions() {
+      const type = scaleKey(app.state.mission?.scaleId || "standard");
+      return MISSIONS.filter(m => scaleKey(m.type) === type);
+    }
+    function activeMaps() {
+      const type = scaleKey(app.state.mission?.scaleId || "standard");
+      return MAPS.filter(m => scaleKey(m.type) === type);
+    }
+    function selectedMission() {
+      return MISSIONS.find(m => m.id === app.state.mission?.missionId) || null;
+    }
+    function selectedMap() {
+      return MAPS.find(m => m.id === app.state.mission?.mapId) || null;
+    }
+    function activeMarkers() {
+      return [...(selectedMap()?.markers || [])].sort((a, b) => Number(a.num || 0) - Number(b.num || 0));
+    }
+    function missionDefaultMarkersActive() {
+      const mission = selectedMission();
+      if (!mission) return true;
+      const text = [...(mission.params || []), ...(mission.scoring || [])].join(" ");
+      return !/all\s+mission\s+markers\s+are\s+deactivated/i.test(text);
+    }
+    function colorFor(player) {
+      return app.armies[player]?.color || (player === "p1" ? "#9333ea" : "#d4af37");
+    }
+    function colorRgb(hex) {
+      const clean = String(hex || "#9333ea").replace("#", "");
+      const full = clean.length === 3 ? clean.split("").map(c => c + c).join("") : clean.padEnd(6, "0").slice(0, 6);
+      return [0, 2, 4].map(i => parseInt(full.slice(i, i + 2), 16) || 0).join(",");
+    }
+    function markerState(num) {
+      app.state.mission = app.state.mission || { markers: {} };
+      app.state.mission.markers = app.state.mission.markers || {};
+      const key = String(num);
+      if (!app.state.mission.markers[key]) {
+        const active = missionDefaultMarkersActive();
+        app.state.mission.markers[key] = { active, activatedRound: active ? 1 : null, controller: "neutral", p1Supply: 0, p2Supply: 0, selectedPlayer: "p1", home: "neutral" };
+      }
+      const marker = app.state.mission.markers[key];
+      if (typeof marker.active !== "boolean") marker.active = true;
+      if (marker.active && !marker.activatedRound) marker.activatedRound = app.state.round || 1;
+      if (Number(marker.p1Supply || 0) > Number(marker.p2Supply || 0)) marker.controller = "p1";
+      else if (Number(marker.p2Supply || 0) > Number(marker.p1Supply || 0)) marker.controller = "p2";
+      else marker.controller = "neutral";
+      return marker;
+    }
+    function toggleMarkerActive(num) {
+      const marker = markerState(num);
+      marker.active = marker.active === false;
+      marker.activatedRound = marker.active ? (marker.activatedRound || app.state.round || 1) : null;
+      addLog(`Mission marker ${num} ${marker.active ? `activated in round ${marker.activatedRound}` : "deactivated"}.`);
+      persistPrototypeState();
+      buzz(8);
+      renderPrototype();
+    }
+    function cycleMarkerActivationRound(num) {
+      const marker = markerState(num);
+      marker.active = true;
+      const current = Number(marker.activatedRound || app.state.round || 1);
+      marker.activatedRound = current >= 5 ? 1 : current + 1;
+      addLog(`Mission marker ${num} activation round set to ${marker.activatedRound}.`);
+      persistPrototypeState();
+      buzz(8);
+      renderPrototype();
+      openMarkerModal(num);
+    }
+    function updateMarkerSupply(num, player, delta) {
+      const marker = markerState(num);
+      const previousController = marker.controller || "neutral";
+      const key = `${player}Supply`;
+      const next = Math.max(0, Number(marker[key] || 0) + delta);
+      if (next === Number(marker[key] || 0)) return false;
+      marker.selectedPlayer = player;
+      marker[key] = next;
+      markerState(num);
+      if ((marker.controller || "neutral") !== previousController) marker.lastChangedRound = app.state.round || 1;
+      addLog(`Mission marker ${num}: ${player === "p2" ? "opponent" : "my"} supply ${next}.`);
+      buzz(12);
+      persistPrototypeState();
+      renderPrototype();
+      openMarkerModal(num);
+      return true;
+    }
+    function updateMarkerSupplyHeld(el, delta) {
+      const num = el.dataset.markerNum;
+      const player = el.dataset.markerPlayer || "p1";
+      const marker = markerState(num);
+      const previousController = marker.controller || "neutral";
+      const key = `${player}Supply`;
+      const current = Number(marker[key] || 0);
+      const next = Math.max(0, current + delta);
+      if (next === current) return false;
+      marker.selectedPlayer = player;
+      marker[key] = next;
+      markerState(num);
+      if ((marker.controller || "neutral") !== previousController) marker.lastChangedRound = app.state.round || 1;
+      addLog(`Mission marker ${num}: ${player === "p2" ? "opponent" : "my"} supply ${next}.`);
+      buzz(12);
+      persistPrototypeState();
+      const small = el.querySelector("small");
+      el.textContent = String(next);
+      if (small) el.appendChild(small);
+      return true;
+    }
+    function selectMarkerPlayer(num, player) {
+      markerState(num).selectedPlayer = player;
+      buzz(8);
+      persistPrototypeState();
+      openMarkerModal(num);
+      renderPrototype();
+    }
+    function setMarkerHome(num, home) {
+      markerState(num).home = home === "p1" || home === "p2" ? home : "neutral";
+      persistPrototypeState();
+      openMarkerModal(num);
+      renderPrototype();
+    }
+    function setSoloMarkerControl(num, controller) {
+      const marker = markerState(num);
+      const previousController = marker.controller || "neutral";
+      if (controller === "p1") {
+        marker.p1Supply = Math.max(1, Number(marker.p1Supply || 0));
+        marker.p2Supply = 0;
+      } else if (controller === "p2") {
+        marker.p1Supply = 0;
+        marker.p2Supply = 1;
+      } else {
+        marker.p1Supply = 0;
+        marker.p2Supply = 0;
+      }
+      marker.selectedPlayer = "p1";
+      markerState(num);
+      if ((marker.controller || "neutral") !== previousController) marker.lastChangedRound = app.state.round || 1;
+      addLog(`Mission marker ${num} set to ${marker.controller === "p1" ? "my control" : marker.controller === "p2" ? "opponent control" : "neutral"}.`);
+      persistPrototypeState();
+      buzz(10);
+      renderPrototype();
+      openMarkerModal(num);
+    }
+    function setMarkerControlQuick(num, controller) {
+      const marker = markerState(num);
+      const previousController = marker.controller || "neutral";
+      if (controller === "p1") {
+        marker.p1Supply = Math.max(1, Number(marker.p1Supply || 0));
+        marker.p2Supply = 0;
+      } else if (controller === "p2") {
+        marker.p1Supply = 0;
+        marker.p2Supply = 1;
+      } else {
+        marker.p1Supply = 0;
+        marker.p2Supply = 0;
+      }
+      marker.selectedPlayer = "p1";
+      markerState(num);
+      if ((marker.controller || "neutral") !== previousController) marker.lastChangedRound = app.state.round || 1;
+      addLog(`Mission marker ${num} set to ${marker.controller === "p1" ? "my control" : marker.controller === "p2" ? "opponent control" : "neutral"}.`);
+      persistPrototypeState();
+      buzz(8);
+      renderPrototype();
+    }
+    function cycleScoringMarkerControl(num) {
+      const marker = markerState(num);
+      const order = ["neutral", "p1", "p2"];
+      const current = order.indexOf(marker.controller || "neutral");
+      setMarkerControlQuick(num, order[(current + 1) % order.length]);
+    }
+    function roundScoring(round = app.state.round) {
+      app.state.roundScoring = app.state.roundScoring || {};
+      const key = String(round || 1);
+      if (!app.state.roundScoring[key]) app.state.roundScoring[key] = defaultRoundScore();
+      const score = app.state.roundScoring[key];
+      score.destroyedBy = { p1: 0, p2: 0, ...(score.destroyedBy || {}) };
+      score.manualVp = { p1: 0, p2: 0, ...(score.manualVp || {}) };
+      score.missionVp = { p1: 0, p2: 0, ...(score.missionVp || {}) };
+      score.vp = { p1: 0, p2: 0, ...(score.vp || {}) };
+      score.events = Array.isArray(score.events) ? score.events : [];
+      return score;
+    }
+    function setRoundVpFromParts(round = app.state.round) {
+      const score = roundScoring(round);
+      score.vp = {
+        p1: Math.max(0, Number(score.manualVp.p1 || 0) + Number(score.missionVp.p1 || 0)),
+        p2: Math.max(0, Number(score.manualVp.p2 || 0) + Number(score.missionVp.p2 || 0))
+      };
+      return score.vp;
+    }
+    function totalVpThrough(round = app.state.round) {
+      const total = { p1: 0, p2: 0 };
+      const maxRound = Math.max(1, Math.min(5, Number(round) || 1));
+      for (let index = 1; index <= maxRound; index += 1) {
+        const vp = setRoundVpFromParts(index);
+        total.p1 += Number(vp.p1 || 0);
+        total.p2 += Number(vp.p2 || 0);
+      }
+      return { p1: Math.min(99, total.p1), p2: Math.min(99, total.p2) };
+    }
+    function syncDisplayedVp(round = app.state.round) {
+      app.state.vp = totalVpThrough(round);
+      return app.state.vp;
+    }
+    function changeVp(player, delta) {
+      const id = player === "p2" ? "p2" : "p1";
+      const current = Number(syncDisplayedVp()[id] || 0);
+      const target = Math.max(0, Math.min(99, current + Number(delta || 0)));
+      const actual = target - current;
+      if (!actual) return false;
+      const score = roundScoring();
+      score.manualVp[id] = Number(score.manualVp[id] || 0) + actual;
+      score.events.push({ type: "manual-vp", player: id, delta: actual, round: app.state.round, ts: Date.now() });
+      addLog(`${id === "p2" ? "Opponent" : "My"} VP ${actual > 0 ? "+" : ""}${actual}.`);
+      setRoundVpFromParts();
+      syncDisplayedVp();
+      persistPrototypeState();
+      buzz(10);
+      renderPrototype();
+      return true;
+    }
+    function destroyedSupply(player = SOLO_PLAYER) {
+      return Number(roundScoring().destroyedBy[player === "p2" ? "p2" : "p1"] || 0);
+    }
+    function adjustDestroyedSupply(player, delta) {
+      const id = player === "p2" ? "p2" : "p1";
+      const score = roundScoring();
+      const current = Number(score.destroyedBy[id] || 0);
+      const next = Math.max(0, current + Number(delta || 0));
+      if (next === current) return false;
+      score.destroyedBy[id] = next;
+      score.events.push({ type: "destroyed-supply", player: id, delta: next - current, round: app.state.round, ts: Date.now() });
+      addLog(`Enemy supply destroyed this round: ${next}.`);
+      persistPrototypeState();
+      buzz(10);
+      renderPrototype();
+      return true;
+    }
+    function missionScoreKey() {
+      return [app.state.round || 1, app.state.mission?.scaleId || "", app.state.mission?.missionId || "", app.state.mission?.mapId || ""].join(":");
+    }
+    function markerHomePlayer(marker, state) {
+      return state?.home === "p1" || state?.home === "p2" ? state.home : "neutral";
+    }
+    function markerResolutionSummary() {
+      return activeMarkers().map(marker => {
+        const state = markerState(marker.num);
+        const previous = state.lastScoredController || "neutral";
+        return {
+          markerId: marker.num,
+          previousOwner: previous,
+          p1Supply: Number(state.p1Supply || 0),
+          p2Supply: Number(state.p2Supply || 0),
+          resolvedOwner: state.controller || "neutral",
+          changedHands: previous !== state.controller,
+          home: markerHomePlayer(marker, state)
+        };
+      });
+    }
+    function controlledActiveMarkers() {
+      return activeMarkers()
+        .map(marker => ({ marker, state: markerState(marker.num), home: markerHomePlayer(marker, markerState(marker.num)) }))
+        .filter(({ state }) => state.active !== false && (state.controller === "p1" || state.controller === "p2"));
+    }
+    function missionAutoScore() {
+      const mission = selectedMission();
+      const id = mission?.id || "";
+      const out = { p1: 0, p2: 0, notes: [], sources: [], markerResolution: markerResolutionSummary(), label: "Round VP" };
+      const destroyed = roundScoring().destroyedBy;
+
+      ["p1", "p2"].forEach(player => {
+        const amount = Number(destroyed[player] || 0);
+        if (amount > 0) {
+          out[player] += amount;
+          out.sources.push({ type: "destroyed-supply", player, amount, label: player === "p1" ? "Enemy supply destroyed" : "Your supply destroyed" });
+        }
+      });
+
+      if (!mission) {
+        out.notes.push("Choose a mission before scoring marker VP.");
+        return out;
+      }
+
+      const controlled = controlledActiveMarkers();
+      if (id.includes("frontlines")) {
+        if (app.state.round < 2) {
+          out.notes.push("Frontlines marker VP starts in round 2.");
+          return out;
+        }
+        controlled.forEach(({ marker, state }) => {
+          out[state.controller] += 1;
+          out.sources.push({ type: "marker-control", markerId: marker.num, player: state.controller, amount: 1, label: `M${marker.num} controlled` });
+          if (state.lastChangedRound === app.state.round) {
+            out[state.controller] += 2;
+            out.sources.push({ type: "marker-stolen", markerId: marker.num, player: state.controller, amount: 2, label: `M${marker.num} gained this round` });
+          }
+        });
+        out.notes.push("Adds marker control VP and Frontlines control-swing bonus when a marker changed hands this round.");
+      } else if (id.includes("supply-drop")) {
+        const start = id.includes("skirmish") ? 2 : 1;
+        if (app.state.round < start) {
+          out.notes.push(`Supply Drop marker VP starts in round ${start}.`);
+          return out;
+        }
+        controlled.forEach(({ marker, state }) => {
+          const amount = Number(state.activatedRound || app.state.round || 1);
+          out[state.controller] += amount;
+          out.sources.push({ type: "supply-drop-marker", markerId: marker.num, player: state.controller, amount, label: `M${marker.num} activated round ${amount}` });
+        });
+        out.notes.push("Scores active controlled markers by activation round.");
+      } else if (id.includes("divide-and-conquer")) {
+        controlled.forEach(({ marker, state }) => {
+          if (Number(marker.num) === 5) {
+            out[state.controller] += 2;
+            out.sources.push({ type: "marker-5", markerId: marker.num, player: state.controller, amount: 2, label: "Marker 5 controlled" });
+          }
+        });
+        out.notes.push("Adds marker 5 VP only. Quarter control and destroyed enemy supply still need manual VP.");
+      } else if (id.includes("gather-the-resources")) {
+        if (app.state.round < 2) {
+          out.notes.push("Gather the Resources marker VP starts in round 2.");
+          return out;
+        }
+        controlled.forEach(({ marker, state, home }) => {
+          if ((home === "p1" || home === "p2") && home !== state.controller) {
+            out[state.controller] += 2;
+            out.sources.push({ type: "opponent-marker", markerId: marker.num, player: state.controller, amount: 2, label: `M${marker.num} opponent marker` });
+          }
+        });
+        out.notes.push("Adds 2 VP for controlled markers assigned to the opponent. Gather actions are manual.");
+      } else if (id.includes("hold-position")) {
+        if (app.state.round < 2) {
+          out.notes.push("Hold Position marker VP starts in round 2.");
+          return out;
+        }
+        controlled.forEach(({ marker, state, home }) => {
+          const amount = (home === "p1" || home === "p2") && home !== state.controller ? 2 : 1;
+          out[state.controller] += amount;
+          out.sources.push({ type: "hold-marker", markerId: marker.num, player: state.controller, amount, label: `M${marker.num} ${amount === 2 ? "opponent" : "own/neutral"} marker` });
+        });
+        out.notes.push("Adds 1 VP for neutral/own markers and 2 VP for opponent markers.");
+      } else {
+        out.notes.push("This mission uses position, action, or quarter scoring that still needs manual VP.");
+      }
+
+      if (!controlled.length && out.sources.every(source => source.type === "destroyed-supply")) {
+        out.notes.push("No active controlled markers are ready to score.");
+      }
+      return out;
+    }
+    function applyMissionMarkerScore() {
+      const score = missionAutoScore();
+      const key = missionScoreKey();
+      if (app.state.scoredMarkersByRound?.[key] && !confirm("Mission VP already scored for this round. Score it again?")) return false;
+
+      const round = roundScoring();
+      round.missionVp = { p1: Number(score.p1 || 0), p2: Number(score.p2 || 0) };
+      setRoundVpFromParts();
+      syncDisplayedVp();
+
+      app.state.scoredMarkersByRound = app.state.scoredMarkersByRound || {};
+      if (selectedMission()) app.state.scoredMarkersByRound[key] = true;
+      activeMarkers().forEach(marker => {
+        const state = markerState(marker.num);
+        state.lastScoredController = state.controller || "neutral";
+      });
+      app.state.scoringLedger = Array.isArray(app.state.scoringLedger) ? app.state.scoringLedger : [];
+      app.state.scoringLedger = app.state.scoringLedger.filter(entry => entry.id !== key);
+      app.state.scoringLedger.unshift({
+        id: key,
+        round: app.state.round,
+        missionId: app.state.mission?.missionId || "",
+        mapId: app.state.mission?.mapId || "",
+        sources: score.sources || [],
+        notes: score.notes || [],
+        markerResolution: score.markerResolution || [],
+        destroyedBy: { ...round.destroyedBy },
+        totalsAfter: { p1: app.state.vp.p1, p2: app.state.vp.p2 },
+        ts: Date.now()
+      });
+      addLog(`Scored round ${app.state.round}: +${score.p1 || 0} VP.`);
+      persistPrototypeState();
+      buzz(18);
+      renderPrototype();
+      return true;
+    }
+    function currentRoundVp(player = SOLO_PLAYER) {
+      return Number(setRoundVpFromParts()[player === "p2" ? "p2" : "p1"] || 0);
+    }
+    function currentManualVp(player = SOLO_PLAYER) {
+      return Number(roundScoring().manualVp[player === "p2" ? "p2" : "p1"] || 0);
+    }
+    function scoringNote(score = missionAutoScore()) {
+      const done = app.state.scoredMarkersByRound?.[missionScoreKey()];
+      const parts = [];
+      if (done) parts.push("Round scored. Tap Score Round again only if you need to rescore it.");
+      else if (score.p1 || score.p2) parts.push(`Ready to add +${score.p1 || 0} VP.`);
+      if (score.notes?.length) parts.push(score.notes[0]);
+      return parts.join(" ") || "Set marker control, add bonus VP if needed, then score the round.";
+    }
+    function openScoringLedger() {
+      const rows = (app.state.scoringLedger || []).map(entry => `<div class="ledger-entry">
+        <div class="ledger-head">
+          <span class="ledger-title">Round ${esc(entry.round)}</span>
+          <span class="ledger-total">${Number(entry.totalsAfter?.p1 || 0)} VP</span>
+        </div>
+        ${(entry.sources || []).map(source => `<div class="ledger-source"><span>${esc(source.label || source.type || "Score")}</span><span>${source.player === "p2" ? "Opp" : "Me"} +${esc(source.amount || 0)}</span></div>`).join("")}
+        ${(entry.notes || []).length ? `<div class="ledger-note">${entry.notes.map(esc).join(" ")}</div>` : ""}
+      </div>`).join("");
+      modalShell("Scoring Ledger", "Round-by-round VP sources and totals", `<div class="ledger-list">${rows || `<div class="status-line">No scored rounds yet.</div>`}</div>`);
+    }
+    function openLogModal() {
+      const rows = (app.state.log || []).map(entry => `<div class="ledger-entry">
+        <div class="ledger-head">
+          <span class="ledger-title">Round ${esc(entry.round)} · ${esc(entry.phase || "Log")}</span>
+          <span class="ledger-total">${esc(entry.ts || "")}</span>
+        </div>
+        <div class="ledger-note">${esc(entry.text)}</div>
+      </div>`).join("");
+      modalShell("Game Log", "Newest events first", `<div class="ledger-list">${rows || `<div class="status-line">No events logged yet.</div>`}</div>`);
+    }
+    function openReadMeModal() {
+      const items = [
+        ["Load an army", "Open Army Builder, save a roster, then use Army to import that saved roster into the companion."],
+        ["Pick a mission", "Use Mission or Setup to choose scale, mission, and map. Tap markers to set control and supply."],
+        ["Track the round", "Tap Round to advance. Hold Round to go back. Changing rounds clears activation states."],
+        ["Score", "Use Bonus VP and Destroyed, tap marker chips to cycle control, then tap Score Round."],
+        ["Clear", "Use Clear in the bottom-right bar to reset the companion tracker and imported roster for a fresh game."]
+      ];
+      modalShell("Read Me", "Quick table flow", `<div class="ledger-list">${items.map(([title, body]) => `<div class="ledger-entry"><div class="ledger-title">${esc(title)}</div><div class="ledger-note">${esc(body)}</div></div>`).join("")}</div>`);
+    }
+    function resetCompanionState() {
+      if (!confirm("Reset the companion tracker, imported roster, mission setup, and scoring?")) return;
+      try { localStorage.removeItem(SAVE_KEY); } catch (err) {}
+      const fresh = JSON.parse(JSON.stringify(FALLBACK));
+      fresh.state = normalizeScoreState(fresh.state);
+      app.state = fresh.state;
+      app.armies = fresh.armies;
+      viewingArmy = SOLO_PLAYER;
+      closePrototypeModal();
+      renderPrototype();
+    }
+    function isDemoUnit(unit) {
+      return String(unit?.key || "").startsWith("demo-");
+    }
+    function isDemoTactical(card) {
+      return String(card?.key || "").startsWith("demo-tac-");
+    }
+    function sanitizeArmy(army, fallbackArmy) {
+      const source = army && typeof army === "object" ? army : {};
+      const units = (source.units || []).filter(unit => !isDemoUnit(unit));
+      const tactical = (source.tactical || []).filter(card => !isDemoTactical(card));
+      const hasRealRoster = units.length > 0 || tactical.length > 0;
+      return {
+        ...fallbackArmy,
+        ...source,
+        label: hasRealRoster ? (source.label || fallbackArmy.label) : fallbackArmy.label,
+        color: hasRealRoster ? (source.color || fallbackArmy.color) : fallbackArmy.color,
+        units,
+        tactical
+      };
+    }
+    function loadPrototypeState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(SAVE_KEY) || "null");
+        if (saved?.armies) {
+          const state = normalizeScoreState({ ...FALLBACK.state, ...(saved.state || {}) });
+          state.viewingArmy = SOLO_PLAYER;
+          return {
+            state,
+            armies: {
+              p1: sanitizeArmy(saved.armies.p1, FALLBACK.armies.p1),
+              p2: sanitizeArmy(saved.armies.p2, FALLBACK.armies.p2)
+            }
+          };
+        }
+      } catch (err) {}
+      const fresh = JSON.parse(JSON.stringify(FALLBACK));
+      fresh.state = normalizeScoreState(fresh.state);
+      return fresh;
+    }
+    function persistPrototypeState() {
+      try {
+        localStorage.setItem(SAVE_KEY, JSON.stringify({ state: app.state, armies: app.armies }));
+      } catch (err) {}
+    }
+    function loadBuilderPayloadScript(src) {
+      return new Promise((resolve, reject) => {
+        const previous = window.__starcraftTMGRuntimePayload;
+        delete window.__starcraftTMGRuntimePayload;
+        const script = document.createElement("script");
+        script.src = src;
+        script.onload = () => {
+          const payload = window.__starcraftTMGRuntimePayload;
+          if (previous) window.__starcraftTMGRuntimePayload = previous;
+          else delete window.__starcraftTMGRuntimePayload;
+          script.remove();
+          payload ? resolve(payload) : reject(new Error("Payload script did not expose runtime data"));
+        };
+        script.onerror = () => {
+          if (previous) window.__starcraftTMGRuntimePayload = previous;
+          script.remove();
+          reject(new Error("Payload not found"));
+        };
+        document.head.appendChild(script);
+      });
+    }
+    async function loadBuilderPayload(faction) {
+      const info = BUILDER_FACTIONS[faction];
+      try {
+        const text = await fetch(info.payload).then(r => {
+          if (!r.ok) throw new Error("Payload not found");
+          return r.text();
+        });
+        const assign = text.indexOf("__starcraftTMGRuntimePayload");
+        const start = text.indexOf("{", assign);
+        const end = text.indexOf(";\nwindow.__starcraftTMGRuntimeStatus", start);
+        return JSON.parse(text.slice(start, end > start ? end : undefined).trim().replace(/;\s*$/, ""));
+      } catch (err) {
+        return loadBuilderPayloadScript(info.payload);
+      }
+    }
+    function maxModelCount(value) {
+      const nums = String(value ?? "1").match(/\d+/g)?.map(Number) || [1];
+      return Math.max(...nums, 1);
+    }
+    function modelRange(value) {
+      const nums = String(value ?? "").match(/\d+/g)?.map(Number) || [];
+      return nums.length ? { min: Math.min(...nums), max: Math.max(...nums) } : null;
+    }
+    function supplyTiersFrom(unit) {
+      return (unit?.tiers || []).map(t => {
+        const range = modelRange(t.models);
+        return range ? { min: range.min, max: range.max, supply: Number(t.supply || 0), tier: t.tier || t.name || "" } : null;
+      }).filter(Boolean).sort((a, b) => a.min - b.min);
+    }
+    function cleanText(value) {
+      return String(value ?? "").replace(/\s+/g, " ").trim();
+    }
+    function normalizeBuilderUnit(entry, payload, index) {
+      const unit = (payload.units || []).find(u => u.id === entry.unitId) || {};
+      const tier = entry.tier || {};
+      const max = maxModelCount(tier.models || unit.models || 1);
+      const stats = unit.stats || {};
+      return {
+        rawUnit: unit,
+        selectedUpgrades: (entry.selectedUpgrades || []).map(upgrade => ({
+          name: upgrade.name || "Upgrade",
+          phase: upgrade.phase || upgrade.timing || "Any Phase",
+          type: upgrade.type || "",
+          cost: upgrade.cost || "",
+          desc: cleanText(upgrade.description || upgrade.text || upgrade.effect || "")
+        })),
+        key: `${entry.unitId || unit.id || unit.name || "unit"}-${index}-${Date.now()}`,
+        name: unit.name || entry.unitId || "Unit",
+        role: unit.role || "Unit",
+        supply: Number(tier.supply ?? unit.supply ?? 1),
+        supplyTiers: supplyTiersFrom(unit),
+        models: { current: max, max },
+        stats: {
+          shield: stats.shield ?? unit.shield ?? "-",
+          speed: stats.speed ?? unit.move ?? unit.speed ?? "-",
+          evade: stats.evade ?? unit.evade ?? "-",
+          armour: stats.armour ?? stats.armor ?? unit.armour ?? unit.armor ?? "-",
+          hp: stats.hp ?? unit.hp ?? "-",
+          size: stats.size ?? unit.size ?? "-"
+        },
+        location: "reserves",
+        engaged: false,
+        activated: false,
+        weapons: (unit.weapons || []).map(w => ({ name: w.name || "Weapon", phase: w.phase || "", range: w.range || "-", target: w.target || "", roa: w.roa || w.attacks || "", hit: w.hit || "-", surge: w.surge || "", sDie: w.sDie || w.sdie || "", dmg: w.damage || w.dmg || "-", keywords: w.keywords || [] })),
+        abilities: (unit.abilities || []).map(a => ({ name: a.name || "Ability", phase: a.phase || "Any Phase", type: a.type || "", desc: cleanText(a.description || a.text || "") })),
+        phaseAbilities: Object.entries(unit.phaseAbilities || {}).flatMap(([phase, list]) => (list || []).map(a => ({ name: a.name || "Ability", phase, type: a.type || "", desc: cleanText(a.description || a.text || "") }))),
+        keywords: unit.keywords || unit.tags || []
+      };
+    }
+    function normalizeTacticalCard(card, index) {
+      return {
+        key: `tactical-${card.id || card.name || index}-${index}`,
+        id: card.id || "",
+        name: card.name || "Tactical Card",
+        cost: Number(card.cost ?? card.gasCost ?? 0),
+        resourceType: card.resourceType || "",
+        resourceValue: card.resourceValue ?? "",
+        state: "ready",
+        abilities: (card.abilities || []).map(a => ({ name: a.name || "Ability", phase: a.phase || "Any Phase", type: a.type || "", desc: cleanText(a.description || a.text || "") }))
+      };
+    }
+    async function importBuilderRoster(player, faction) {
+      player = SOLO_PLAYER;
+      const info = BUILDER_FACTIONS[faction];
+      const saved = savedBuilder(faction);
+      if (!saved || !(saved.units || []).length) {
+        openBuilderModal(`No saved ${info.label} roster found. Open the builder, save a list, then import it here.`);
+        return;
+      }
+      openBuilderModal(`Importing ${info.label} into your roster...`);
+      try {
+        const payload = await loadBuilderPayload(faction);
+        const units = (saved.units || []).map((entry, index) => normalizeBuilderUnit(entry, payload, index));
+        const tactical = (saved.tactical || []).map((id, index) => (payload.tacticalCards || []).find(card => card.id === id)).filter(Boolean).map(normalizeTacticalCard);
+        app.armies[player] = { label: info.label, color: info.color, units, tactical };
+        viewingArmy = player;
+        app.state.viewingArmy = player;
+        if (saved.scaleId) app.state.mission.scaleId = saved.scaleId;
+        if (saved.missionId) app.state.mission.missionId = saved.missionId;
+        if (saved.mapId) app.state.mission.mapId = saved.mapId;
+        addLog(`Imported ${info.label} roster with ${units.length} units and ${tactical.length} tactical cards.`);
+        persistPrototypeState();
+        renderPrototype();
+        openBuilderModal(`Imported ${units.length} ${info.label} units and ${tactical.length} tactical cards into your roster.`);
+      } catch (err) {
+        openBuilderModal(`Could not import ${info.label}: ${err.message || err}`);
+      }
+    }
+    function consumePendingBuilderImport() {
+      let faction = "";
+      let shouldCleanUrl = false;
+      try {
+        const params = new URLSearchParams(window.location.search || "");
+        faction = params.get("importArmy") || params.get("importRoster") || "";
+        shouldCleanUrl = params.has("importArmy") || params.has("importRoster");
+      } catch (err) {}
+      if (!faction) {
+        try {
+          faction = sessionStorage.getItem(COMPANION_PENDING_IMPORT_KEY) || "";
+        } catch (err) {}
+      }
+      try {
+        sessionStorage.removeItem(COMPANION_PENDING_IMPORT_KEY);
+      } catch (err) {}
+      faction = String(faction || "").trim().toLowerCase();
+      if (shouldCleanUrl && window.history?.replaceState) {
+        try {
+          window.history.replaceState(null, "", window.location.pathname + window.location.hash);
+        } catch (err) {}
+      }
+      if (!BUILDER_FACTIONS[faction]) return;
+      window.setTimeout(() => importBuilderRoster(SOLO_PLAYER, faction), 0);
+    }
+    function closePrototypeModal() {
+      const root = document.getElementById("prototypeModalRoot");
+      if (root) root.innerHTML = "";
+    }
+    function modalShell(title, sub, body) {
+      const root = document.getElementById("prototypeModalRoot");
+      if (!root) return;
+      root.innerHTML = `<div class="modal-backdrop" onclick="closePrototypeModal()"></div>
+        <div class="modal-panel">
+          <div class="modal-head">
+            <div><div class="modal-title">${esc(title)}</div><div class="modal-sub">${esc(sub)}</div></div>
+            <button class="modal-close" onclick="closePrototypeModal()">×</button>
+          </div>
+          ${body}
+        </div>`;
+    }
+    function openBuilderModal(message = "") {
+      const links = Object.entries(BUILDER_FACTIONS).map(([key, info]) =>
+        `<a class="modal-card-btn" href="${info.href}" target="_blank" rel="noreferrer">${esc(info.label)}<small>Open builder</small></a>`
+      ).join("");
+      const imports = Object.entries(BUILDER_FACTIONS).map(([key, info]) => {
+        const count = builderRosterCount(key);
+        return `<button class="modal-card-btn ${count ? "ready" : ""}" ${count ? "" : "disabled"} onclick='importBuilderRoster(${js(SOLO_PLAYER)}, ${js(key)})'>${esc(info.label)}<small>${count} saved units → My roster</small></button>`;
+      }).join("");
+      modalShell("Army Builder", "Import one saved roster for solo play", `
+        <div class="modal-stack">
+          <div class="modal-grid">${links}</div>
+          <div class="modal-grid">${imports}</div>
+          <div class="status-line">${esc(message || "Pick a builder to edit a roster, or import one saved roster as your army.")}</div>
+        </div>`);
+    }
+    function missionInfoList(title, items) {
+      const list = (items || []).filter(Boolean);
+      if (!list.length) return "";
+      return `<div class="mission-info-section">
+        <div class="mission-info-label">${esc(title)}</div>
+        <ul class="mission-info-list">${list.map(item => `<li>${esc(item)}</li>`).join("")}</ul>
+      </div>`;
+    }
+    function missionInfoRows(title, rows) {
+      const list = (rows || []).filter(row => row && row.text);
+      if (!list.length) return "";
+      return `<div class="mission-info-section">
+        <div class="mission-info-label">${esc(title)}</div>
+        <div class="mission-info-list">${list.map(row => `<div class="mission-info-row"><strong>${esc(row.label)}</strong><span>${esc(row.text)}</span></div>`).join("")}</div>
+      </div>`;
+    }
+    function missionRuleText(rule) {
+      if (!rule) return "";
+      const head = [rule.phase, rule.name].filter(Boolean).join(": ");
+      return [head, rule.description].filter(Boolean).join(" - ");
+    }
+    function missionInfoCard(mission) {
+      if (!mission) {
+        return `<div class="status-line">Pick a mission to see parameters, scoring, and special rules.</div>`;
+      }
+      const params = mission.params || mission.parameters || [];
+      const rules = (mission.additionalRules || []).map(missionRuleText);
+      const meta = [
+        mission.type || "",
+        `${mission.gameLength || "-"} rounds`,
+        `supply ${mission.supply ?? "-"}`,
+        `+${mission.perRound ?? 0}/round`
+      ].filter(Boolean).join(" - ");
+      return `<div class="mission-info-card">
+        <div class="mission-info-head">
+          <div>
+            <div class="mission-info-title">${esc(mission.name || "Mission")}</div>
+            <div class="mission-info-meta">${esc(meta)}</div>
+          </div>
+        </div>
+        ${missionInfoList("Parameters", params)}
+        ${missionInfoList("Scoring", mission.scoring || [])}
+        ${mission.special ? `<div class="mission-info-section"><div class="mission-info-label">Special Winning Condition</div><div class="mission-info-copy">${esc(mission.special)}</div></div>` : ""}
+        ${missionInfoList("Additional Rules", rules)}
+      </div>`;
+    }
+    function markerSetupRows(map) {
+      const setupByNum = new Map((map?.markerSetup || []).map(marker => [String(marker.num), marker]));
+      const markers = (map?.markers || []).length ? map.markers : (map?.markerSetup || []);
+      return markers.map(marker => {
+        const setup = setupByNum.get(String(marker.num)) || {};
+        const details = [];
+        if (setup.desc || marker.desc) details.push(setup.desc || marker.desc);
+        else if (marker.x != null && marker.y != null) details.push(`${marker.x}" from left, ${marker.y}" from bottom`);
+        if (marker.home) details.push(`${String(marker.home).toUpperCase()} home`);
+        return { label: `M${marker.num}`, text: details.join(" - ") || "Mission marker" };
+      });
+    }
+    function deploymentRows(setup) {
+      if (!setup) return [];
+      return [
+        setup.title ? { label: "Zone", text: setup.title } : null,
+        ...(setup.instructions || []).map((text, index) => ({ label: String(index + 1), text }))
+      ].filter(Boolean);
+    }
+    function mapInfoCard(map) {
+      if (!map) {
+        return `<div class="status-line">Pick a map to see marker positions, deployment zones, and notes.</div>`;
+      }
+      const markers = markerSetupRows(map);
+      const meta = [
+        map.type || "",
+        map.size || (map.width && map.height ? `${map.width}" x ${map.height}"` : ""),
+        `${markers.length} markers`
+      ].filter(Boolean).join(" - ");
+      return `<div class="mission-info-card map">
+        <div class="mission-info-head">
+          <div>
+            <div class="mission-info-title">${esc(map.name || "Map")}</div>
+            <div class="mission-info-meta">${esc(meta)}</div>
+          </div>
+        </div>
+        ${missionInfoRows("Markers", markers)}
+        ${missionInfoRows("Blue Deployment", deploymentRows(map.blueSetup))}
+        ${missionInfoRows("Red Deployment", deploymentRows(map.redSetup))}
+        ${map.notes ? `<div class="mission-info-section"><div class="mission-info-label">Notes</div><div class="mission-info-copy">${esc(map.notes)}</div></div>` : ""}
+      </div>`;
+    }
+    function missionPickButtons() {
+      return activeMissions().map(mission => `<button class="modal-card-btn ${app.state.mission.missionId === mission.id ? "ready" : ""}" type="button" onclick='setMissionId(${js(mission.id)})'>${esc(mission.name)}<small>Supply ${esc(mission.supply ?? "-")} - +${esc(mission.perRound ?? 0)}/round - ${esc(mission.gameLength || "-")} rounds</small></button>`).join("");
+    }
+    function mapPickButtons() {
+      return activeMaps().map(map => `<button class="modal-card-btn ${app.state.mission.mapId === map.id ? "ready" : ""}" type="button" onclick='setMapId(${js(map.id)})'>${esc(map.name)}<small>${esc(map.size || "Map")} - ${esc((map.markers || []).length)} markers</small></button>`).join("");
+    }
+    function openMissionModal(message = "") {
+      const mission = selectedMission();
+      const map = selectedMap();
+      modalShell("Mission Setup", "Choose the mission and map for this battle", `
+        <div class="modal-stack">
+          <div class="modal-grid">
+            ${SCALES.map(scale => `<button class="modal-card-btn ${app.state.mission.scaleId === scale.id ? "ready" : ""}" type="button" onclick='setMissionScale(${js(scale.id)})'>${esc(scale.name)}<small>Scale</small></button>`).join("")}
+          </div>
+          <select class="modal-select" onchange="setMissionId(this.value)">
+            <option value="">Mission</option>
+            ${activeMissions().map(m => `<option value="${esc(m.id)}" ${app.state.mission.missionId === m.id ? "selected" : ""}>${esc(m.name)}</option>`).join("")}
+          </select>
+          <select class="modal-select" onchange="setMapId(this.value)">
+            <option value="">Map</option>
+            ${activeMaps().map(m => `<option value="${esc(m.id)}" ${app.state.mission.mapId === m.id ? "selected" : ""}>${esc(m.name)}</option>`).join("")}
+          </select>
+          <div class="mission-info-actions">${missionPickButtons() || `<div class="status-line">No missions found for this scale.</div>`}</div>
+          ${missionInfoCard(mission)}
+          <div class="mission-info-actions">${mapPickButtons() || `<div class="status-line">No maps found for this scale.</div>`}</div>
+          ${mapInfoCard(map)}
+          <div class="status-line">${esc(message || "Marker control is scored from the scoring panel after you pick a map.")}</div>
+        </div>`);
+    }
+    function setMissionScale(scaleId) {
+      app.state.mission.scaleId = scaleId;
+      app.state.mission.missionId = "";
+      app.state.mission.mapId = "";
+      app.state.mission.markers = {};
+      addLog(`Mission scale set to ${scaleId}.`);
+      persistPrototypeState();
+      renderPrototype();
+      openMissionModal("Scale changed. Pick a mission and map for that scale.");
+    }
+    function setMissionId(missionId) {
+      app.state.mission.missionId = missionId;
+      app.state.mission.markers = {};
+      addLog(`Mission set to ${selectedMission()?.name || "none"}.`);
+      persistPrototypeState();
+      renderPrototype();
+      openMissionModal("Mission updated.");
+    }
+    function setMapId(mapId) {
+      app.state.mission.mapId = mapId;
+      app.state.mission.markers = {};
+      activeMarkers().forEach(marker => markerState(marker.num));
+      addLog(`Map set to ${selectedMap()?.name || "none"}.`);
+      persistPrototypeState();
+      renderPrototype();
+      openMissionModal("Map updated. Mission markers are ready.");
+    }
+    function openMarkerModal(num) {
+      const marker = markerState(num);
+      const markerCall = markerArg(num);
+      const controller = marker.controller === "p1" ? "Mine" : marker.controller === "p2" ? "Opponent" : "Neutral";
+      modalShell(`Mission Marker ${num}`, `${controller} control`, `
+        <div class="marker-editor">
+          <div class="marker-control-board">
+            <button class="marker-control-side" onclick="setSoloMarkerControl(${markerCall}, 'p1')" style="border-color:${marker.controller === "p1" ? colorFor("p1") : "rgba(255,255,255,0.12)"};color:${colorFor("p1")}">Mine<small>I control it</small></button>
+            <button class="marker-control-center" data-tap-type="marker-supply-up" data-hold-type="marker-supply-down" data-marker-num="${esc(num)}" data-marker-player="p1" style="border-color:${colorFor("p1")};color:${colorFor("p1")}">${marker.p1Supply || 0}<small>my supply · tap + · hold -</small></button>
+            <button class="marker-control-side" onclick="setSoloMarkerControl(${markerCall}, 'p2')" style="border-color:${marker.controller === "p2" ? "var(--error)" : "rgba(255,255,255,0.12)"};color:var(--error)">Opponent<small>they control it</small></button>
+          </div>
+          <div class="marker-home-row">
+            <button class="marker-home-btn" onclick="setSoloMarkerControl(${markerCall}, 'neutral')" style="border-color:${marker.controller === "neutral" ? "var(--dim)" : "rgba(255,255,255,0.12)"};color:var(--muted)">Neutral control</button>
+            ${["neutral", "p1", "p2"].map(home => `<button class="marker-home-btn" onclick='setMarkerHome(${markerCall}, ${js(home)})' style="border-color:${marker.home === home ? (home === "neutral" ? "var(--dim)" : home === "p1" ? colorFor("p1") : "var(--error)") : "rgba(255,255,255,0.12)"};color:${home === "neutral" ? "var(--muted)" : home === "p1" ? colorFor("p1") : "var(--error)"}">${home === "neutral" ? "Neutral home" : home === "p1" ? "My home" : "Opponent home"}</button>`).join("")}
+            <button class="marker-home-btn" onclick="toggleMarkerActive(${markerCall});openMarkerModal(${markerCall})" style="border-color:${marker.active === false ? "rgba(255,255,255,0.12)" : "var(--success)"};color:${marker.active === false ? "var(--muted)" : "var(--success)"}">${marker.active === false ? "Inactive marker" : `Active R${esc(marker.activatedRound || app.state.round || 1)}`}</button>
+            <button class="marker-home-btn" onclick="cycleMarkerActivationRound(${markerCall})" style="border-color:rgba(var(--scoring-rgb),0.32);color:var(--scoring)">Activation round</button>
+          </div>
+          <div class="status-line">This solo sheet keeps only the information you need: whether you control the marker, your supply on it, and whether it is your home marker.</div>
+        </div>`);
+    }
+    function armyName(player) {
+      return String(app.armies[player]?.label || player.toUpperCase()).replace(/^P[12]\s*[—-]\s*/i, "");
+    }
+    function effectiveSupply(unit) {
+      if (!unit || unit.location === "destroyed" || Number(unit.models?.current || 0) <= 0) return 0;
+      if (Array.isArray(unit.supplyTiers)) {
+        const count = Number(unit.models.current || 0);
+        const tier = unit.supplyTiers.find(t => count >= Number(t.min || 0) && count <= Number(t.max || 999));
+        if (tier) return Number(tier.supply || 0);
+      }
+      return Number(unit.supply || 0);
+    }
+    function armySupply(player) {
+      const units = app.armies[player]?.units || [];
+      const cap = supplyCap();
+      const board = units.filter(u => u.location === "battlefield").reduce((sum, unit) => sum + effectiveSupply(unit), 0);
+      return { board, available: Math.max(0, cap - board), cap };
+    }
+    function supplyCap() {
+      const mission = selectedMission();
+      if (mission) return Number(mission.supply || 0) + Math.max(0, Number(app.state.round || 1) - 1) * Number(mission.perRound || 0);
+      const scale = app.state.mission?.scaleId || "standard";
+      return scale === "skirmish" ? 6 : scale === "grand" ? 18 : 12;
+    }
+    function totalVp(player) {
+      const vp = app.state.vp || {};
+      return Number(vp[player] || 0);
+    }
+    function phaseName() {
+      return ["Movement", "Assault", "Combat", "Scoring"][app.state.phase || 0] || "Movement";
+    }
+    function phaseColors() {
+      return ["#22c55e", "#ef7d45", "#d4568f", "#6b8cce"];
+    }
+    function missionTitle() {
+      const mission = selectedMission()?.name || "No mission";
+      const map = selectedMap()?.name || "No map";
+      return `${mission} · ${map}`;
+    }
+    function markerRows() {
+      const markers = activeMarkers();
+      if (!markers.length) return `<button class="marker-chip" onclick="openMissionModal()"><div class="marker-num">Setup</div><div class="marker-owner">Pick mission/map</div></button>`;
+      return markers.map(m => {
+        const id = String(m.num);
+        const marker = markerState(id);
+        const controller = marker.controller || "neutral";
+        const owner = controller === "p1" ? "controlled-p1" : controller === "p2" ? "controlled-p2" : "";
+        const label = controller === "p1" ? "Mine" : controller === "p2" ? "Opponent" : "Neutral";
+        const supply = controller === "p1" ? ` · Supply ${marker.p1Supply || 0}` : "";
+        return `<button class="marker-chip ${owner}" onclick="openMarkerModal(${markerArg(id)})"><div class="marker-num">M${esc(id)}</div><div class="marker-owner">${label}${supply}</div></button>`;
+      }).join("");
+    }
+    function markerScorePreview(num, score) {
+      const sources = (score?.sources || []).filter(source => String(source.markerId || "") === String(num));
+      const mine = sources.filter(source => source.player === "p1").reduce((sum, source) => sum + Number(source.amount || 0), 0);
+      const opponent = sources.filter(source => source.player === "p2").reduce((sum, source) => sum + Number(source.amount || 0), 0);
+      if (mine || opponent) return `${mine ? `Me +${mine}` : ""}${mine && opponent ? " / " : ""}${opponent ? `Opp +${opponent}` : ""}`;
+      return "";
+    }
+    function scoringMarkerSummary(score = missionAutoScore()) {
+      const markers = activeMarkers();
+      if (!markers.length) return "No map selected";
+      const counts = markers.reduce((acc, marker) => {
+        const state = markerState(marker.num);
+        if (state.active !== false) acc.active += 1;
+        if (state.controller === "p1") acc.mine += 1;
+        if (state.controller === "p2") acc.opponent += 1;
+        return acc;
+      }, { active: 0, mine: 0, opponent: 0 });
+      const preview = (Number(score.p1 || 0) || Number(score.p2 || 0)) ? ` · +${score.p1 || 0} VP ready` : "";
+      return `${counts.mine} mine · ${counts.opponent} opponent · ${counts.active}/${markers.length} active${preview}`;
+    }
+    function scoringMarkerRows(score = missionAutoScore()) {
+      const markers = activeMarkers();
+      if (!markers.length) {
+        return `<button class="scoring-marker-empty" type="button" onclick="openMissionModal()">Pick mission and map</button>`;
+      }
+      return markers.map(markerInfo => {
+        const id = String(markerInfo.num);
+        const marker = markerState(id);
+        const controller = marker.controller || "neutral";
+        const owner = controller === "p1" ? "controlled-p1" : controller === "p2" ? "controlled-p2" : "";
+        const inactive = marker.active === false ? "inactive" : "";
+        const label = controller === "p1" ? "Mine" : controller === "p2" ? "Opponent" : "Neutral";
+        const activeLabel = marker.active === false ? "Off" : "On";
+        const preview = markerScorePreview(id, score);
+        const markerCall = markerArg(id);
+        return `<div class="scoring-marker-card ${owner} ${inactive}">
+          <div class="scoring-marker-top">
+            <button class="scoring-marker-main" type="button" onclick="cycleScoringMarkerControl(${markerCall})">
+              <span class="scoring-marker-num">M${esc(id)}</span>
+              <span class="scoring-marker-owner">${esc(label)}</span>
+              ${preview ? `<span class="scoring-marker-score">${esc(preview)}</span>` : ""}
+            </button>
+            <button class="scoring-marker-active-btn ${marker.active === false ? "" : "is-current"}" type="button" onclick="toggleMarkerActive(${markerCall})">${esc(activeLabel)}</button>
+          </div>
+        </div>`;
+      }).join("");
+    }
+    function tacticalRows(player) {
+      const army = app.armies[player] || {};
+      const cards = army.tactical || [];
+      if (!cards.length) return `<div class="tac-card"><span class="tac-name">No tactical cards imported</span><span class="tac-value">Open builder</span></div>`;
+      const res = resourceLabel(player);
+      return cards.map(card => {
+        const state = card.state || "ready";
+        const stateLabel = state === "ability" ? "Ability" : state === "resource" ? res : "Ready";
+        return `<div class="tac-card">
+          <span class="tac-name">${esc(card.name)}</span>
+          <span class="tac-value">${card.resourceValue ? `+${esc(card.resourceValue)} ${esc(card.resourceType || res)}` : "—"}</span>
+          <button class="tac-state" onclick='cycleTactical(${js(card.key)})'>${esc(stateLabel)}</button>
+        </div>`;
+      }).join("");
+    }
+    function resourceLabel(player) {
+      const label = armyName(player).toLowerCase();
+      if (label.includes("zerg")) return "BM";
+      if (label.includes("protoss")) return "PE";
+      if (label.includes("terran")) return "CP";
+      return app.armies[player]?.tactical?.[0]?.resourceType || "RES";
+    }
+    function availableResource(player) {
+      return (app.armies[player]?.tactical || []).filter(c => (c.state || "ready") === "ready").reduce((sum, c) => sum + Number(c.resourceValue || 0), 0);
+    }
+    function cycleTactical(key) {
+      const cards = app.armies[viewingArmy]?.tactical || [];
+      const card = cards.find(c => c.key === key);
+      if (!card) return;
+      card.state = card.state === "ready" ? "ability" : card.state === "ability" ? "resource" : "ready";
+      addLog(`${card.name} tactical card set to ${card.state}.`);
+      persistPrototypeState();
+      renderPrototype();
+    }
+    function unitCard(unit, index) {
+      const isDestroyed = unit.location === "destroyed" || Number(unit.models?.current || 0) <= 0;
+      const locationKey = isDestroyed ? "destroyed" : (unit.location || "reserves");
+      const loc = LOC[locationKey] || LOC.reserves;
+      const color = app.armies[viewingArmy]?.color || "#7b93a8";
+      const open = "";
+      const weapons = (unit.weapons || []).slice(0, 2).map(w => `<div class="weapon-block">
+        <div class="weapon-name">${esc(w.name || "Weapon")}</div>
+        <div class="weapon-stats">
+          <span class="weapon-stat"><span class="k">R</span> <span class="v">${esc(w.range || "-")}</span></span>
+          <span class="weapon-stat"><span class="k">Hit</span> <span class="v">${esc(w.hit || "-")}</span></span>
+          <span class="weapon-stat"><span class="k">D</span> <span class="v">${esc(w.dmg || w.damage || "-")}</span></span>
+        </div>
+      </div>`).join("");
+      const domId = `unit-${String(unit.key).replace(/[^a-z0-9_-]/gi, "-")}`;
+      return `<div class="unit-card ${open} ${isDestroyed ? "dead" : ""}" style="--unit-color:${color}" id="${esc(domId)}">
+        <div class="unit-header" onclick='toggleUnit(${js(domId)})'>
+          <span class="unit-status-dot ${loc.cls}"></span>
+          <div class="unit-info">
+            <div class="unit-name">${esc(unit.name)}</div>
+            <div class="unit-meta"><span>S${effectiveSupply(unit)}</span><span>·</span><span>${loc.label}</span></div>
+          </div>
+          <div class="unit-controls">
+            <span class="unit-location-pill ${loc.cls}">${esc(loc.label)}</span>
+            ${unit.engaged ? `<span class="unit-badge on engaged">Eng</span>` : ""}
+            ${unit.activated ? `<span class="unit-badge on activated">Act</span>` : ""}
+            <button class="model-counter ${unit.models?.current === unit.models?.max ? "full" : ""}" onclick='event.stopPropagation();cycleModels(${js(unit.key)})'>
+              <span class="current">${esc(unit.models?.current ?? "-")}</span><span class="sep">/</span><span class="max">${esc(unit.models?.max ?? "-")}</span>
+            </button>
+          </div>
+          <span class="unit-chevron">›</span>
+        </div>
+        <div class="unit-body">
+          <div class="stat-row">
+            <div class="stat-chip"><span class="label">SPD</span><span class="value">${esc(unit.stats?.speed || "-")}</span></div>
+            <div class="stat-chip"><span class="label">ARM</span><span class="value">${esc(unit.stats?.armour || unit.stats?.armor || "-")}</span></div>
+            <div class="stat-chip"><span class="label">HP</span><span class="value">${esc(unit.stats?.hp || "-")}</span></div>
+          </div>
+          ${weapons}
+          <div class="location-btns">
+            ${Object.entries(LOC).map(([key, meta]) => `<button class="loc-btn ${locationKey === key ? "active" : ""}" onclick='event.stopPropagation();setUnitLocation(${js(unit.key)}, ${js(key)})' style="--loc-color:${key === "reserves" ? "var(--warning)" : key === "battlefield" ? "var(--success)" : "var(--error)"}">${meta.label}</button>`).join("")}
+          </div>
+        </div>
+      </div>`;
+    }
+    function setUnitLocation(key, location) {
+      const unit = (app.armies[viewingArmy]?.units || []).find(u => u.key === key);
+      if (!unit) return;
+      const wasDestroyed = unit.location === "destroyed" || Number(unit.models?.current || 0) <= 0;
+      unit.location = location;
+      if (location === "destroyed") {
+        if (unit.models) unit.models.current = 0;
+        unit.activated = false;
+        unit.engaged = false;
+      } else if (wasDestroyed && unit.models && Number(unit.models.current || 0) <= 0) {
+        unit.models.current = Number(unit.models.max || 1);
+      }
+      addLog(`${unit.name} moved to ${LOC[location]?.label || location}.`);
+      persistPrototypeState();
+      renderPrototype();
+    }
+    function cycleModels(key) {
+      const unit = (app.armies[viewingArmy]?.units || []).find(u => u.key === key);
+      if (!unit?.models) return;
+      unit.models.current = unit.models.current <= 0 ? unit.models.max : unit.models.current - 1;
+      if (unit.models.current <= 0) unit.location = "destroyed";
+      addLog(`${unit.name} model count is ${unit.models.current}/${unit.models.max}.`);
+      persistPrototypeState();
+      renderPrototype();
+    }
+    function setArmy(player, btn) {
+      viewingArmy = SOLO_PLAYER;
+      app.state.viewingArmy = SOLO_PLAYER;
+      persistPrototypeState();
+      renderPrototype();
+    }
+    function changeRound(delta) {
+      const current = Number(app.state.round || 1);
+      const next = Math.max(1, Math.min(5, current + delta));
+      if (next === current) return false;
+      app.state.round = next;
+      Object.values(app.armies || {}).forEach(army => (army.units || []).forEach(unit => { unit.activated = false; }));
+      addLog(`Round changed to ${next}.`);
+      persistPrototypeState();
+      buzz(12);
+      renderPrototype();
+      return true;
+    }
+    function nextPhase() {
+      app.state.phase = (Number(app.state.phase || 0) + 1) % 4;
+      Object.values(app.armies || {}).forEach(army => (army.units || []).forEach(unit => { unit.activated = false; }));
+      addLog(`Phase changed to ${phaseName()}.`);
+      persistPrototypeState();
+      buzz(12);
+      renderPrototype();
+    }
+    function setPhase(index) {
+      app.state.phase = Math.max(0, Math.min(3, Number(index) || 0));
+      Object.values(app.armies || {}).forEach(army => (army.units || []).forEach(unit => { unit.activated = false; }));
+      addLog(`Phase changed to ${phaseName()}.`);
+      persistPrototypeState();
+      renderPrototype();
+    }
+    function renderPrototype() {
+      viewingArmy = SOLO_PLAYER;
+      app.state.viewingArmy = SOLO_PLAYER;
+      syncDisplayedVp();
+      const s1 = armySupply("p1");
+      const score = missionAutoScore();
+      const missionDone = !!app.state.scoredMarkersByRound?.[missionScoreKey()];
+      const readyVp = Number(score.p1 || 0);
+      const manualVp = currentManualVp("p1");
+      const armyColor = colorFor("p1");
+      const armyRgb = colorRgb(armyColor);
+      document.querySelector(".scorebar").style.background = `radial-gradient(ellipse 70% 130% at 18% 0%, rgba(${armyRgb}, 0.32), transparent 62%), linear-gradient(180deg, #1a1722 0%, #13111d 100%)`;
+      document.querySelector(".score-side.left .score-faction").innerHTML = `${esc(armyName("p1")) || "My Army"} <span class="star">★</span>`;
+      document.querySelector(".score-side.left .score-faction").style.color = armyColor;
+      document.querySelector(".score-center .score-supply").style.color = armyColor;
+      document.querySelector(".score-center .score-supply").innerHTML = `<strong>${s1.available}</strong><span>Available<br>Supply</span>`;
+      document.querySelector(".vp-num.p1").style.color = armyColor;
+      document.querySelector(".vp-num.p1").style.textShadow = `0 0 20px rgba(${armyRgb}, 0.5)`;
+      document.querySelector(".vp-num.p1").textContent = totalVp("p1");
+      document.querySelector(".vp-num.p1").setAttribute("aria-label", `My victory points: ${totalVp("p1")}. Tap to add one. Hold to subtract one.`);
+      document.querySelector(".vp-num.p2").textContent = totalVp("p2");
+      const roundChip = document.querySelector(".round-chip");
+      document.querySelector(".round-chip .value").textContent = app.state.round || 1;
+      roundChip.removeAttribute("onclick");
+      roundChip.setAttribute("data-tap-type", "round-up");
+      roundChip.setAttribute("data-hold-type", "round-down");
+      roundChip.setAttribute("aria-label", "Round counter. Tap to advance round. Hold to decrease round.");
+      roundChip.removeAttribute("oncontextmenu");
+      const colors = phaseColors();
+      const phaseIndex = app.state.phase || 0;
+      const phaseColor = colors[phaseIndex] || "var(--phase)";
+      const phaseRgb = colorRgb(phaseColor);
+      const phaseChip = document.querySelector(".phase-chip");
+      phaseChip.style.color = phaseColor;
+      phaseChip.style.background = `linear-gradient(180deg, rgba(${phaseRgb}, 0.24), rgba(${phaseRgb}, 0.09))`;
+      phaseChip.style.borderColor = `rgba(${phaseRgb}, 0.75)`;
+      phaseChip.style.boxShadow = `0 0 14px rgba(${phaseRgb}, 0.35)`;
+      phaseChip.setAttribute("onclick", "nextPhase()");
+      phaseChip.setAttribute("aria-label", `${phaseName()} phase. Tap to advance phase.`);
+      document.querySelector(".phase-dot").style.background = phaseColor;
+      document.querySelector(".phase-dot").style.boxShadow = `0 0 8px ${phaseColor}`;
+      document.querySelector(".phase-name").textContent = phaseName().replace("Movement", "Move").replace("Scoring", "Score");
+      document.querySelector(".mission-title").textContent = missionTitle();
+      document.querySelector(".mission-sub").textContent = `${app.state.mission?.scaleId || "standard"} · Supply cap ${supplyCap()} · ${activeMarkers().length} markers`;
+      document.querySelector(".marker-grid").innerHTML = markerRows();
+      document.querySelector(".scoring-sub").textContent = `Round ${app.state.round || 1} · Ready +${readyVp} · Total ${totalVp("p1")}`;
+      document.querySelectorAll(".scoring-total").forEach(el => el.textContent = totalVp("p1"));
+      document.querySelectorAll(".scoring-manual").forEach(el => el.textContent = manualVp);
+      document.querySelectorAll(".scoring-destroyed").forEach(el => el.textContent = destroyedSupply("p1"));
+      document.querySelector(".scoring-ready").textContent = missionDone ? "Rescore" : `+${readyVp} VP`;
+      document.querySelector(".scoring-marker-summary").textContent = scoringMarkerSummary(score);
+      document.querySelector(".scoring-marker-grid").innerHTML = scoringMarkerRows(score);
+      document.querySelector(".scoring-note").textContent = scoringNote(score);
+      const missionScoreButton = document.querySelector(".score-primary-btn");
+      missionScoreButton.classList.toggle("ready", !missionDone && !!(score.p1 || score.p2));
+      missionScoreButton.classList.toggle("done", missionDone);
+      missionScoreButton.querySelector(".score-primary-label").textContent = missionDone ? "Round Scored" : "Score Round";
+      document.querySelector(".prototype-toolbar-sub").textContent = Object.entries(BUILDER_FACTIONS).map(([key, info]) => `${info.label} ${builderRosterCount(key)}`).join(" · ");
+      const cards = app.armies[viewingArmy]?.tactical || [];
+      document.querySelector(".tactical-title").textContent = `My Tactical Cards · ${armyName(SOLO_PLAYER)}`;
+      document.querySelector(".tactical-sub").textContent = `${cards.filter(c => (c.state || "ready") === "ready").length}/${cards.length} ready · ${availableResource(viewingArmy)} ${resourceLabel(viewingArmy)} available`;
+      document.querySelector(".tac-grid").innerHTML = tacticalRows(viewingArmy);
+      document.querySelector(".army-tabs").innerHTML = `<button class="army-tab p1 active" onclick="setArmy('p1', this)">My Army <span class="count">(${(app.armies.p1?.units || []).length})</span></button>`;
+      const units = app.armies[viewingArmy]?.units || [];
+      document.querySelector(".unit-list").innerHTML = units.map(unitCard).join("") || `<div class="unit-card"><div class="unit-header"><div class="unit-info"><div class="unit-name">No units loaded</div><div class="unit-meta"><span>Import your roster from Army Builder</span></div></div></div></div>`;
+    }
+    Object.assign(window, {
+      applyMissionMarkerScore,
+      adjustDestroyedSupply,
+      changeVp,
+      closePrototypeModal,
+      cycleScoringMarkerControl,
+      cycleMarkerActivationRound,
+      cycleModels,
+      cycleTactical,
+      importBuilderRoster,
+      nextPhase,
+      openBuilderModal,
+      openLogModal,
+      openMissionModal,
+      openReadMeModal,
+      openScoringLedger,
+      openMarkerModal,
+      resetCompanionState,
+      setArmy,
+      setMarkerHome,
+      setMissionId,
+      setMissionScale,
+      setMapId,
+      setSoloMarkerControl,
+      setUnitLocation,
+      toggleMarkerActive,
+      toggle,
+      toggleUnit
+    });
+    initHoldRepeats();
+    renderPrototype();
+    consumePendingBuilderImport();
+  </script>
+
+</body>
+</html>

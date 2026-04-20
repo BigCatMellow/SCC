@@ -1,0 +1,91 @@
+Folder structure for: C:\Users\james\Downloads\0 - SCTMG\StarCraft TMG Test (excluding: .git, .idea, .next, .vscode, __pycache__, build, dist, env, node_modules, venv)
+
+└── StarCraft TMG Test
+    ├── .nojekyll
+    ├── README.md
+    ├── SCTMG2.png
+    ├── army_sheet example.html
+    ├── banner.png
+    ├── glossary.html
+    ├── icon.svg
+    ├── index.html
+    ├── manifest.json
+    ├── missions.html
+    ├── package.json
+    ├── protoss.html
+    ├── rules.html
+    ├── runtime
+    │   ├── README.md
+    │   ├── abilities.js
+    │   ├── army-building-rules.js
+    │   ├── builder-adapter.js
+    │   ├── faction-cards.js
+    │   ├── generated-content-merge.js
+    │   ├── generated-detail-merge.js
+    │   ├── generated-owned-merge.js
+    │   ├── generated-rules-content.js
+    │   ├── generated-rules-detail-content.js
+    │   ├── index.js
+    │   ├── keywords.js
+    │   ├── legacy-builder-adapter.js
+    │   ├── legacy-builder-browser-bridge.js
+    │   ├── payloads
+    │   │   ├── advice-packages.js
+    │   │   ├── army-sheet-export.js
+    │   │   ├── glossary-reference.js
+    │   │   ├── glossary-renderer.js
+    │   │   ├── keywords-browser.js
+    │   │   ├── mission-setup.js
+    │   │   ├── protoss.js
+    │   │   ├── reference-page-shell.js
+    │   │   ├── rules-reference.js
+    │   │   ├── terran.js
+    │   │   ├── unit-upgrade-cost-overrides.js
+    │   │   └── zerg.js
+    │   ├── protoss-content.js
+    │   ├── runtime-example.js
+    │   ├── runtime-merge.js
+    │   ├── runtime-summary.json
+    │   ├── tactical-cards.js
+    │   ├── terran-content.js
+    │   ├── unit-family-metadata.js
+    │   ├── unit-roster-reference.js
+    │   ├── units.js
+    │   ├── upgrades.js
+    │   ├── weapons.js
+    │   └── zerg-content.js
+    ├── scripts
+    │   ├── enrich_advice_packages_with_ids.mjs
+    │   ├── extract_rules_reference.mjs
+    │   ├── generate_browser_payloads.mjs
+    │   ├── generate_glossary_page.mjs
+    │   ├── generate_glossary_reference.mjs
+    │   ├── generate_mission_setup_payload.mjs
+    │   ├── generate_rules_reference_payload.mjs
+    │   ├── generate_upgrade_cost_overrides.mjs
+    │   ├── inspect_accuracy_targets.mjs
+    │   ├── rebuild_and_validate_runtime.mjs
+    │   ├── rebuild_runtime_detail_content.mjs
+    │   ├── rebuild_runtime_generated_content.mjs
+    │   ├── rebuild_runtime_supporting_data.mjs
+    │   ├── rebuild_unit_roster_reference.mjs
+    │   ├── smoke_check_site_runtime.mjs
+    │   └── validate_runtime_against_rules.mjs
+    ├── source-references
+    │   ├── generated
+    │   │   ├── AUDIT_SUMMARY.md
+    │   │   ├── README.md
+    │   │   ├── RUNTIME_VALIDATION.md
+    │   │   ├── complete_glossary.json
+    │   │   ├── faction_expanded_reference.json
+    │   │   ├── mission_setup_reference.json
+    │   │   ├── part11_keywords.json
+    │   │   ├── part12_tactical_cards.json
+    │   │   ├── part12_units_and_upgrades.json
+    │   │   ├── part9_army_building.json
+    │   │   ├── runtime-validation-report.json
+    │   │   ├── runtime_vs_rules_audit.json
+    │   │   └── unit_upgrade_cost_overrides_source.json
+    │   └── rules_reference_content.html
+    ├── terran.html
+    └── zerg.html

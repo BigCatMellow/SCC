@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1118">
+  <title>StarCraft: TMG - Faction Field Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./runtime/payloads/unified-command.css">
+</head>
+<body style="--accent: var(--protoss); --accent-rgb: 240,185,75; --menu-rgb: 240,185,75;">
+  <div class="command-shell">
+    <header class="topbar">
+      <button class="menu-trigger" id="bottomMenuBtn" type="button" aria-label="Open navigation menu">☰</button>
+      <div class="topbar-copy">
+        <div class="eyebrow">Unified Command</div>
+        <div class="screen-title">Faction Field Guide</div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero-card">
+        <div class="hero-kicker">// Faction Doctrine Archive</div>
+        <div class="hero-title">Doctrine in command format.</div>
+        <div class="hero-copy">Read framework notes, race overviews, RAW watch boxes, and practical card guidance without switching into the old book layout.</div>
+      </section>
+
+      <section class="control-row">
+        <input class="search-input" id="guideSearch" type="search" placeholder="Search faction guide..." autocomplete="off">
+        <div class="chip-row" id="guideChips"></div>
+      </section>
+
+      <section>
+        <div class="section-label" id="guideLabel">Guide</div>
+        <div class="field-frame" id="guideReader"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="app-menu-overlay" id="appMenuOverlay"></div>
+  <aside class="app-menu-panel" id="appMenuPanel" aria-hidden="true"></aside>
+
+  <script src="./runtime/payloads/reference-page-shell.js"></script>
+  <script>
+    const guides = [
+      { id: 'index', label: 'Contents', file: 'index.html', accent: '#f0b94b' },
+      { id: 'groundwork', label: 'Framework', file: 'groundwork.html', accent: '#38bdf8' },
+      { id: 'protoss', label: 'Protoss', file: 'protoss.html', accent: '#f0b94b' },
+      { id: 'terran', label: 'Terran', file: 'terran.html', accent: '#3b82f6' },
+      { id: 'zerg', label: 'Zerg', file: 'zerg.html', accent: '#9333ea' }
+    ];
+
+    const state = {
+      active: 'index',
+      search: '',
+      docs: new Map()
+    };
+
+    const bases = ['../Faction Guide/', '../Companion/Faction Guide/', 'Faction Guide/'];
+
+    const esc = (value = '') => String(value).replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+
+    async function fetchText(file) {
+      let lastError = null;
+      for (const base of bases) {
+        try {
+          const response = await fetch(`${base}${file}`);
+          if (!response.ok) throw new Error(`${response.status} ${base}${file}`);
+          return response.text();
+        } catch (error) {
+          lastError = error;
+        }
+      }
+      throw lastError || new Error(`Could not load ${file}`);
+    }
+
+    function cleanHtml(html) {
+      const template = document.createElement('template');
+      template.innerHTML = html || '';
+      template.content.querySelectorAll('script, style, button, .site-nav, .theme-toggle, .running').forEach(node => node.remove());
+      template.content.querySelectorAll('[style]').forEach(node => node.removeAttribute('style'));
+      template.content.querySelectorAll('a[href]').forEach(link => {
+        const href = link.getAttribute('href') || '';
+        const target = guides.find(guide => guide.file === href);
+        if (target) {
+          link.href = '#';
+          link.dataset.guide = target.id;
+        }
+      });
+      return template.innerHTML;
+    }
+
+    function sectionTitle(page, fallback) {
+      const title = page.querySelector('.part-title, .section-title, h1, h2')?.textContent?.trim();
+      return title || fallback;
+    }
+
+    function sectionKicker(page, guide) {
+      return page.querySelector('.part-kicker, .section-kicker')?.textContent?.trim() || guide.label;
+    }
+
+    function extractBody(page) {
+      const clone = page.cloneNode(true);
+      clone.querySelectorAll('.running, .part-title, .part-kicker, .section-band').forEach(node => node.remove());
+      return cleanHtml(clone.innerHTML);
+    }
+
+    async function loadGuide(guide) {
+      if (state.docs.has(guide.id)) return state.docs.get(guide.id);
+      const html = await fetchText(guide.file);
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const pages = Array.from(doc.querySelectorAll('.page'));
+      const sections = pages.map((page, index) => ({
+        title: sectionTitle(page, guide.label),
+        kicker: sectionKicker(page, guide),
+        html: extractBody(page),
+        index
+      }));
+      const payload = { guide, sections };
+      state.docs.set(guide.id, payload);
+      return payload;
+    }
+
+    function matches(section, term) {
+      if (!term) return true;
+      const text = `${section.title} ${section.kicker} ${section.html.replace(/<[^>]+>/g, ' ')}`.toLowerCase();
+      return text.includes(term);
+    }
+
+    function renderChips() {
+      document.getElementById('guideChips').innerHTML = guides.map(guide =>
+        `<button class="command-chip ${state.active === guide.id ? 'active' : ''}" type="button" data-guide="${guide.id}">${esc(guide.label)}</button>`
+      ).join('');
+    }
+
+    async function renderReader() {
+      const guide = guides.find(item => item.id === state.active) || guides[0];
+      document.body.style.setProperty('--accent', guide.accent);
+      document.getElementById('guideLabel').textContent = guide.label;
+      const payload = await loadGuide(guide);
+      const term = state.search.trim().toLowerCase();
+      const sections = payload.sections.filter(section => matches(section, term));
+      document.getElementById('guideReader').innerHTML = sections.map(section => `
+        <article class="reader-card field-section">
+          <div class="reader-kicker">${esc(section.kicker)}</div>
+          <div class="reader-title">${esc(section.title)}</div>
+          <div class="reader-body field-body">${section.html}</div>
+        </article>
+      `).join('') || '<div class="empty-state">No field guide entries match that search.</div>';
+      bindGuideLinks();
+    }
+
+    function bindGuideLinks() {
+      document.querySelectorAll('[data-guide]').forEach(node => {
+        node.onclick = event => {
+          event.preventDefault();
+          state.active = node.dataset.guide;
+          renderAll();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+      });
+    }
+
+    function renderAll() {
+      renderChips();
+      renderReader().catch(error => {
+        document.getElementById('guideReader').innerHTML = `<div class="empty-state">Guide could not load. ${esc(error.message || error)}</div>`;
+      });
+      bindGuideLinks();
+    }
+
+    document.getElementById('guideSearch').addEventListener('input', event => {
+      state.search = event.target.value;
+      renderReader();
+    });
+
+    window.__referencePageShell?.initAppMenu({ activePage: 'field-guide' });
+    renderAll();
+  </script>
+</body>
+</html>

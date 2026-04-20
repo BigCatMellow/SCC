@@ -1,0 +1,70 @@
+StarCraft TMG Site - Remaining Work
+Generated from current files on disk: 2026-04-10
+
+Checks run during this pass
+- Site smoke check: PASS
+- Runtime rules validation: COMPLETED
+- Git status: not available because this folder is not currently a git repository
+
+Highest priority
+1. Fix runtime mustering mismatches.
+   The latest runtime validation reports 22 unit-mustering mismatches across all factions.
+   These are not missing-card issues; counts now line up, but unit models, mineral cost, and supply values do not match the extracted rules source.
+   Report file: source-references/generated/RUNTIME_VALIDATION.md
+   Detailed data: source-references/generated/runtime-validation-report.json
+
+Important UX follow-ups
+4. Browser-test the setup preview window.
+   missions.html now has a two-panel battle setup preview for the selected mission and map.
+   It should be tested in an actual browser for:
+   - popup behavior
+   - print layout
+   - map SVG sizing
+   - mobile preview readability
+   - whether the visual style matches the intended mission/map sheet reference
+
+5. Browser-test the Missions and Maps library card layout on mobile.
+   Recent layout goals:
+   - selector dot and mission/map title should share the same line
+   - mission supply/per-round pills should align with the mission title
+   - map deployment details should stay grouped under one Deployment accordion
+   Smoke checks do not prove the visual layout, so this needs a live mobile pass.
+
+6. Check remaining 100vw sticky-header behavior.
+   index.html and the faction pages still intentionally use full-width sticky header math with calc(50% - 50vw).
+   The CSS includes overflow clipping, but this has caused mobile edge/overflow issues before.
+   Verify on small iPhones and Android devices before considering it done.
+
+Consistency and future-proofing
+7. Clarify source-of-truth flow in README files.
+   README.md says npm run rebuild:runtime is the accuracy workflow.
+   runtime/README.md still describes parts of the runtime as starter/source-of-truth scaffolding.
+   The generated reports currently conflict with each other.
+   Update docs so future rule updates have one clear workflow and one trusted report.
+
+Nice-to-have cleanup
+8. Remove or quarantine runtime/runtime-example.js from production searches.
+    It is an example file with console output. It is harmless, but it shows up in code searches and can distract from real site code.
+
+9. Decide whether Missions and Maps library-level preview buttons are still needed.
+    The current setup page now has Open Setup Preview for selected mission+map.
+    missions.html also has Open Mission Preview and Open Map Preview on the library tabs.
+    Keep them if useful, or remove them if they clutter the workflow.
+
+10. Consider adding a visual regression checklist.
+    The project is mostly static HTML/CSS/JS, so automated smoke checks catch data/load failures but not layout problems.
+    A short manual checklist for desktop, iPhone-width mobile, and print preview would help catch the issues that have come up repeatedly.
+
+Validation issue summary
+- Zerg: 10 unit-mustering mismatches
+- Protoss: 6 unit-mustering mismatches
+- Terran: 6 unit-mustering mismatches
+- Latest smoke counts:
+  - Zerg: 2 faction cards, 12 units, 11 tactical cards
+  - Protoss: 2 faction cards, 7 units, 10 tactical cards
+  - Terran: 2 faction cards, 7 units, 10 tactical cards
+
+Suggested next work order
+1. Fix mustering data and rerun validate_runtime_against_rules.mjs.
+2. Do live browser passes for setup preview, mobile mission/map cards, and sticky headers.
+3. Clarify the source-of-truth docs so future rule updates have one trusted workflow.

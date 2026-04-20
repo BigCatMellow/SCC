@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1118">
+  <title>StarCraft: TMG - Rulebook Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./runtime/payloads/unified-command.css">
+</head>
+<body style="--accent: var(--rules); --accent-rgb: 56,189,248; --menu-rgb: 56,189,248;">
+  <div class="command-shell">
+    <header class="topbar">
+      <button class="menu-trigger" id="bottomMenuBtn" type="button" aria-label="Open navigation menu">☰</button>
+      <div class="topbar-copy">
+        <div class="eyebrow">Unified Command</div>
+        <div class="screen-title">Rulebook Library</div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero-card">
+        <div class="hero-kicker">// Field Protocol Archive</div>
+        <div class="hero-title">Rules without leaving command.</div>
+        <div class="hero-copy">Search the core rules, open a Part, and drill into exact sections using the same tactical interface as the builders and companion.</div>
+      </section>
+
+      <section class="control-row">
+        <input class="search-input" id="ruleSearch" type="search" placeholder="Search rules, keywords, phases, supply..." autocomplete="off">
+        <div class="chip-row" id="groupChips"></div>
+      </section>
+
+      <section>
+        <div class="section-label">Rule Parts</div>
+        <div class="part-grid" id="partGrid"></div>
+      </section>
+
+      <section>
+        <div class="section-label" id="readerLabel">Reader</div>
+        <div id="reader"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="app-menu-overlay" id="appMenuOverlay"></div>
+  <aside class="app-menu-panel" id="appMenuPanel" aria-hidden="true"></aside>
+
+  <script src="./runtime/payloads/reference-page-shell.js"></script>
+  <script>
+    const app = {
+      manifest: null,
+      parts: [],
+      activeGroup: 'all',
+      activePartId: '',
+      search: ''
+    };
+
+    const dataBases = ['../data/', '../Companion/data/', 'data/'];
+
+    const esc = (value = '') => String(value).replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+
+    async function fetchFirst(paths, asJson = true) {
+      let lastError = null;
+      for (const target of paths) {
+        try {
+          const response = await fetch(target);
+          if (!response.ok) throw new Error(`${response.status} ${target}`);
+          return asJson ? response.json() : response.text();
+        } catch (error) {
+          lastError = error;
+        }
+      }
+      throw lastError || new Error('No source found');
+    }
+
+    async function loadRules() {
+      app.manifest = await fetchFirst(dataBases.map(base => `${base}manifest.json`));
+      app.parts = await Promise.all(app.manifest.parts.map(async meta => {
+        const fileName = meta.file.replace(/^data\//, '');
+        const detail = await fetchFirst(dataBases.map(base => `${base}${fileName}`));
+        return { ...meta, ...detail };
+      }));
+      app.activePartId = app.parts[0]?.id || '';
+    }
+
+    function rowHtml(row) {
+      const cls = row.type === 'block' ? 'block' : row.type === 'example' ? 'example' : row.type === 'note' ? 'note' : 'text';
+      return `<div class="reader-row ${cls}">${row.html || esc(row.plain || '')}</div>`;
+    }
+
+    function ruleCard(rule, index, depth = 0) {
+      const children = (rule.children || []).map((child, childIndex) => ruleCard(child, childIndex, depth + 1)).join('');
+      const rows = (rule.rows || []).map(rowHtml).join('');
+      return `<details class="reader-card" ${depth === 0 && index < 2 ? 'open' : ''}>
+        <summary>
+          <span class="reader-index">${depth ? '·' : index + 1}</span>
+          <span class="reader-main">
+            <span class="reader-kicker">${depth ? 'Subsection' : 'Protocol'}</span>
+            <span class="reader-title">${esc(rule.title || 'Untitled rule')}</span>
+          </span>
+        </summary>
+        <div class="reader-body">
+          ${rows}
+          ${children}
+        </div>
+      </details>`;
+    }
+
+    function groupLabel(group) {
+      return {
+        all: 'All',
+        systems: 'Systems',
+        play: 'Play',
+        prepare: 'Prepare',
+        reference: 'Reference'
+      }[group] || group;
+    }
+
+    function partMatches(part, term) {
+      if (!term) return true;
+      const haystack = [
+        part.kicker,
+        part.title,
+        part.group,
+        ...(part.introRows || []).map(row => row.plain),
+        ...(part.rules || []).flatMap(rule => [
+          rule.title,
+          ...(rule.rows || []).map(row => row.plain),
+          ...(rule.children || []).flatMap(child => [child.title, ...(child.rows || []).map(row => row.plain)])
+        ])
+      ].join(' ').toLowerCase();
+      return haystack.includes(term);
+    }
+
+    function filteredParts() {
+      const term = app.search.trim().toLowerCase();
+      return app.parts.filter(part => (app.activeGroup === 'all' || part.group === app.activeGroup) && partMatches(part, term));
+    }
+
+    function renderChips() {
+      const groups = ['all', ...Array.from(new Set(app.parts.map(part => part.group)))];
+      document.getElementById('groupChips').innerHTML = groups.map(group =>
+        `<button class="command-chip ${app.activeGroup === group ? 'active' : ''}" type="button" data-group="${esc(group)}">${esc(groupLabel(group))}</button>`
+      ).join('');
+    }
+
+    function renderParts() {
+      const parts = filteredParts();
+      if (!parts.some(part => part.id === app.activePartId)) app.activePartId = parts[0]?.id || app.parts[0]?.id || '';
+      document.getElementById('partGrid').innerHTML = parts.map(part => `
+        <button class="command-card ${app.activePartId === part.id ? 'active' : ''}" type="button" data-part="${esc(part.id)}" style="--accent:${esc(part.color || '#38bdf8')}; --accent-rgb:56,189,248;">
+          <div class="card-kicker">${esc(part.kicker || `Part ${part.num}`)}</div>
+          <div class="card-title">${esc(part.title)}</div>
+          <div class="card-copy">${(part.rules || []).length} sections · ${esc(groupLabel(part.group))}</div>
+        </button>
+      `).join('') || '<div class="empty-state">No rule parts match that search.</div>';
+    }
+
+    function renderReader() {
+      const part = app.parts.find(item => item.id === app.activePartId);
+      if (!part) {
+        document.getElementById('reader').innerHTML = '<div class="empty-state">No rule part selected.</div>';
+        return;
+      }
+      document.getElementById('readerLabel').textContent = `${part.kicker} · ${part.title}`;
+      document.getElementById('reader').innerHTML = `
+        <article class="hero-card" style="--accent:${esc(part.color || '#38bdf8')};">
+          <div class="hero-kicker">${esc(part.kicker || '')}</div>
+          <div class="hero-title">${esc(part.title || '')}</div>
+          <div class="hero-copy">${(part.introRows || []).map(row => row.html || esc(row.plain || '')).join(' ')}</div>
+        </article>
+        ${(part.rules || []).map(ruleCard).join('')}
+      `;
+    }
+
+    function bind() {
+      document.querySelectorAll('[data-group]').forEach(button => {
+        button.onclick = () => {
+          app.activeGroup = button.dataset.group;
+          renderAll();
+        };
+      });
+      document.querySelectorAll('[data-part]').forEach(button => {
+        button.onclick = () => {
+          app.activePartId = button.dataset.part;
+          renderAll();
+          document.getElementById('readerLabel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+      });
+    }
+
+    function renderAll() {
+      renderChips();
+      renderParts();
+      renderReader();
+      bind();
+    }
+
+    document.getElementById('ruleSearch').addEventListener('input', event => {
+      app.search = event.target.value;
+      renderAll();
+    });
+
+    window.__referencePageShell?.initAppMenu({ activePage: 'guides' });
+    loadRules()
+      .then(renderAll)
+      .catch(error => {
+        document.getElementById('reader').innerHTML = `<div class="empty-state">Rules could not load. ${esc(error.message || error)}</div>`;
+      });
+  </script>
+</body>
+</html>
